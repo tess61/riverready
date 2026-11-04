@@ -16,6 +16,4 @@ return [
         // Writable directory for the EA file cache (used from Phase 3)
         'cache_dir'       => sys_get_temp_dir() . '/riverready_cache',
     ],
-    // Allowed browser origin for local dev only (Vite). Leave '' in production (same origin).
-    'cors_origin' => '',
 ];
