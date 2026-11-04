@@ -1,0 +1,17 @@
+# Secrets: real DB credentials live only here, never committed
+backend/config/config.php
+
+# Dependencies / build output
+node_modules/
+dist/
+vendor/
+
+# EA response cache and logs
+cache/
+*.cache
+backend/cache/
+*.log
+
+# Editor / OS
+.vscode/
+.DS_Store
