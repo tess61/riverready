@@ -3,9 +3,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../api/client.js';
 import { useApi } from '../hooks/useApi.js';
 import { ErrorNotice, Loading } from '../components/Feedback.jsx';
+import ActionList from '../components/ActionList.jsx';
 import ReadingPanel from '../components/ReadingPanel.jsx';
-
-const CATEGORY = { documents: 'Documents', supplies: 'Supplies', home: 'Home', people: 'People', evacuation: 'Evacuation', other: 'Other' };
 
 // One call to /overview gives stored info + actions + live EA data.
 export default function LocationDetail() {
@@ -51,20 +50,7 @@ export default function LocationDetail() {
 
       <ReadingPanel external={external} onRetry={reload} />
 
-      <section className="panel" aria-labelledby="act-h">
-        <h2 id="act-h">Preparedness actions</h2>
-        {actions.length === 0 ? <p className="muted">No actions yet.</p> : (
-          <ul className="action-list">
-            {actions.map((a) => (
-              <li key={a.id}>
-                <span aria-hidden="true">{a.is_done ? '☑' : '☐'}</span>{' '}
-                <span className={a.is_done ? 'done' : ''}>{a.title}</span>{' '}
-                <span className="muted small">{CATEGORY[a.category] || a.category} · {a.priority} priority{a.due_date ? ` · due ${a.due_date}` : ''}{a.is_done ? ' · done' : ''}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      <ActionList locationId={l.id} initial={actions} />
     </>
   );
 }

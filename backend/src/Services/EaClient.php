@@ -49,6 +49,22 @@ final class EaClient
         return ['status' => $hasLatest ? 'ok' : 'empty', 'data' => $station, 'fetchedAt' => $r['fetchedAt']];
     }
 
+    /** Recent readings of ONE measure, oldest first, for the trend sparkline. */
+    public function readings(string $measureId, int $hours): array
+    {
+        // `since` limits to the window; 100 rows covers 24h of 15-minute readings.
+        $r = $this->fetch('/id/measures/' . rawurlencode($measureId) . '/readings', [
+            'since'   => gmdate('Y-m-d\TH:i:s\Z', time() - $hours * 3600),
+            '_sorted' => '',
+            '_limit'  => 100 * (int) ceil($hours / 24),
+        ]);
+        if ($r['status'] !== 'ok') {
+            return $r;
+        }
+        $points = EaNormaliser::readings($r['data']);
+        return ['status' => $points === [] ? 'empty' : 'ok', 'data' => $points, 'fetchedAt' => $r['fetchedAt']];
+    }
+
     /** Cached GET + JSON decode. Only successful responses are cached. */
     private function fetch(string $path, array $query = []): array
     {

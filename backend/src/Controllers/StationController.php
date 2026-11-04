@@ -53,6 +53,26 @@ final class StationController
         Response::json(200, ['station' => $r['data'], 'status' => $r['status'], 'fetchedAt' => $r['fetchedAt']]);
     }
 
+    // GET /api/measures/{id}/readings?hours=24 : recent readings for one measure (trend data).
+    public function readings(array $params): void
+    {
+        $id    = (string) ($params['id'] ?? '');
+        $hours = $_GET['hours'] ?? '24';
+        $v = (new Validator())
+            ->pattern('id', $id, '/^[A-Za-z0-9_\-]{1,100}$/', 'must be 1-100 letters, numbers, - or _')
+            ->pattern('hours', $hours, '/^(?:[1-9]|[1-3]\d|4[0-8])$/', 'must be a whole number from 1 to 48');
+        if ($v->fails()) {
+            throw new ApiException(400, 'BAD_REQUEST', 'Invalid parameters.', $v->errors());
+        }
+        $r = $this->ea->readings($id, (int) $hours);
+        $this->failIfUnavailable($r['status']);
+        if ($r['status'] === 'not_found') {
+            throw new ApiException(404, 'NOT_FOUND', 'Measure not found.');
+        }
+        // 'empty' = valid measure with no readings in the window: 200 with an empty list.
+        Response::json(200, ['items' => $r['data'] ?? [], 'fetchedAt' => $r['fetchedAt']]);
+    }
+
     private function failIfUnavailable(string $status): void
     {
         if ($status === 'timeout') {

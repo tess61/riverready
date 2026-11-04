@@ -2368,6 +2368,111 @@
               ]
             }
           }
+        },
+        {
+          "name": "Measure readings - valid (24h)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('items array oldest first', () => { const j = pm.response.json(); pm.expect(j.items).to.be.an('array'); if (j.items.length > 1) pm.expect(j.items[0].dateTime <= j.items[1].dateTime).to.be.true; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/measures/1029TH-level-stage-i-15_min-mASD/readings?hours=24",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "measures",
+                "1029TH-level-stage-i-15_min-mASD",
+                "readings"
+              ],
+              "query": [
+                {
+                  "key": "hours",
+                  "value": "24"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Measure readings - invalid hours",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('fields.hours', () => pm.expect(pm.response.json().error.fields).to.have.property('hours'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/measures/1029TH-level-stage-i-15_min-mASD/readings?hours=999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "measures",
+                "1029TH-level-stage-i-15_min-mASD",
+                "readings"
+              ],
+              "query": [
+                {
+                  "key": "hours",
+                  "value": "999"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "FAILURE SIM: measure readings 502 when EA down",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 502', () => pm.response.to.have.status(502));",
+                  "pm.test('error code', () => pm.expect(pm.response.json().error.code).to.eql('EA_UNAVAILABLE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlEaDown}}/api/measures/1029TH-level-stage-i-15_min-mASD/readings",
+              "host": [
+                "{{baseUrlEaDown}}"
+              ],
+              "path": [
+                "api",
+                "measures",
+                "1029TH-level-stage-i-15_min-mASD",
+                "readings"
+              ]
+            }
+          }
         }
       ]
     },

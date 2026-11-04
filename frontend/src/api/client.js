@@ -48,5 +48,9 @@ export const api = {
   createLocation: (body) => request('/locations', { method: 'POST', body }),
   updateLocation: (id, body) => request(`/locations/${enc(id)}`, { method: 'PUT', body }),
   deleteLocation: (id) => request(`/locations/${enc(id)}`, { method: 'DELETE' }),
+  getReadings: (measureId, hours, signal) => request(`/measures/${enc(measureId)}/readings?hours=${hours}`, { signal }),
+  createAction: (locationId, body) => request(`/locations/${enc(locationId)}/actions`, { method: 'POST', body }),
+  updateAction: (id, body) => request(`/actions/${enc(id)}`, { method: 'PUT', body }),
+  deleteAction: (id) => request(`/actions/${enc(id)}`, { method: 'DELETE' }),
   getOverview: (id, signal) => request(`/locations/${enc(id)}/overview`, { signal }),
 };

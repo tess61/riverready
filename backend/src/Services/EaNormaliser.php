@@ -41,6 +41,21 @@ final class EaNormaliser
         ];
     }
 
+    /** Readings list -> [{dateTime, value}] oldest first. Rows without a numeric value or time are skipped. */
+    public static function readings($json): array
+    {
+        $out = [];
+        foreach (self::asList($json['items'] ?? null) as $row) {
+            $value = is_array($row) ? self::number($row['value'] ?? null) : null;
+            $time  = is_array($row) ? self::text($row['dateTime'] ?? null) : null;
+            if ($value !== null && $time !== null) {
+                $out[] = ['dateTime' => $time, 'value' => $value];
+            }
+        }
+        usort($out, static fn (array $a, array $b) => strcmp($a['dateTime'], $b['dateTime']));
+        return $out;
+    }
+
     private static function measure($m, array $scale): array
     {
         if (is_string($m)) { // bare URL: all we can get is the id

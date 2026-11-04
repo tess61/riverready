@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { api } from '../api/client.js';
 import { useApi } from '../hooks/useApi.js';
+import LocationCard from '../components/LocationCard.jsx';
 import { Empty, ErrorNotice, Loading } from '../components/Feedback.jsx';
 
 export default function Home() {
@@ -22,11 +23,7 @@ export default function Home() {
         <ul className="cards">
           {data.map((l) => (
             <li key={l.id}>
-              <Link to={`/locations/${l.id}`} className="card">
-                <h2>{l.name}</h2>
-                <p>{l.station_label || `Station ${l.station_reference}`}</p>
-                <p className="muted small">{[l.river_name, l.town].filter(Boolean).join(' · ') || 'No river or town recorded'}</p>
-              </Link>
+              <LocationCard location={l} />
             </li>
           ))}
         </ul>

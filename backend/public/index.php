@@ -123,6 +123,7 @@ $overview = static fn () => new OverviewController(new LocationRepository(db()),
 
 $router->add('GET', '/api/stations',                    static fn (array $p) => $stations()->search($p));
 $router->add('GET', '/api/stations/{ref}',              static fn (array $p) => $stations()->show($p));
+$router->add('GET', '/api/measures/{id}/readings',      static fn (array $p) => $stations()->readings($p));
 $router->add('GET', '/api/locations/{id}/overview',     static fn (array $p) => $overview()->show($p));
 
 // Route path: everything from "/api" onward, so it works under any sub-folder on the host.
