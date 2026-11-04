@@ -1,13 +1,15 @@
+import { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
-import Home from './pages/Home.jsx';
-import StationSearch from './pages/StationSearch.jsx';
-import LocationForm from './pages/LocationForm.jsx';
-import LocationDetail from './pages/LocationDetail.jsx';
-import NotFound from './pages/NotFound.jsx';
+const Home = lazy(() => import('./pages/Home.jsx'));
+const StationSearch = lazy(() => import('./pages/StationSearch.jsx'));
+const LocationForm = lazy(() => import('./pages/LocationForm.jsx'));
+const LocationDetail = lazy(() => import('./pages/LocationDetail.jsx'));
+const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 export default function App() {
   return (
+    <Suspense fallback={<p role="status" aria-live="polite" style={{ padding: '1rem' }}>Loading…</p>}>
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
@@ -18,5 +20,6 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
+    </Suspense>
   );
 }

@@ -1,0 +1,10 @@
+# RiverReady
+
+> Educational flood preparedness app (university project KV6025). Not an official flood warning service and not safety advice. Check the Environment Agency for official information.
+
+RiverReady lets a person save locations linked to Environment Agency monitoring stations, see the latest river readings, and keep a preparedness checklist per location. It has no user accounts.
+
+## Data sources
+
+- [Environment Agency Flood Monitoring API](https://environment.data.gov.uk/flood-monitoring/doc/reference): station and reading data used for live values.
+- [Environment Agency flood information](https://check-for-flooding.service.gov.uk/): the official source for flood warnings.

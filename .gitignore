@@ -15,3 +15,4 @@ backend/cache/
 # Editor / OS
 .vscode/
 .DS_Store
+.env.production

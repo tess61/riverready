@@ -1,0 +1,23 @@
+{
+  "specVersion": "1.0",
+  "entries": [
+    {
+      "identifier": "urn:air:riverready.example:app:riverready",
+      "displayName": "RiverReady",
+      "type": "text/html",
+      "description": "Educational flood preparedness web app: saved locations linked to Environment Agency stations, latest readings and checklists. Not an official warning service.",
+      "tags": [
+        "flood",
+        "preparedness",
+        "education"
+      ],
+      "data": {
+        "note": "Placeholder publisher domain; replace with the deployed domain in Phase 6b."
+      },
+      "representativeQueries": [
+        "Where can I see the latest river level near my home?",
+        "How do I keep a flood preparedness checklist for my address?"
+      ]
+    }
+  ]
+}

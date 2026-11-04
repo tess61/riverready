@@ -1,0 +1,13 @@
+# UNTESTED until deployment (Phase 6b). SPA fallback for Apache on nuwebspace.
+# Sends unknown paths to index.html so deep links (e.g. /locations/3) work on refresh.
+# If the app is served from a sub-folder, set RewriteBase to that path (must match VITE_BASE).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # RewriteBase /your/subpath/
+  # Leave real files, folders and the API alone
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  RewriteCond %{REQUEST_URI} !/api(/|$)
+  RewriteRule ^ index.html [L]
+</IfModule>
