@@ -16,6 +16,14 @@
     {
       "key": "actionId",
       "value": ""
+    },
+    {
+      "key": "baseUrlEaDown",
+      "value": "http://localhost:8011"
+    },
+    {
+      "key": "baseUrlEaSlow",
+      "value": "http://localhost:8012"
     }
   ],
   "item": [
@@ -1807,7 +1815,564 @@
       ]
     },
     {
-      "name": "3 Cleanup (delete location)",
+      "name": "3 EA integration (Phase 3)",
+      "description": "Start extra servers for failure simulation: RIVERREADY_EA_BASE_URL=http://nonexistent.invalid/x php -S localhost:8011 -t backend/public backend/public/index.php ; RIVERREADY_EA_TIMEOUT=1 RIVERREADY_EA_CONNECT_TIMEOUT=1 RIVERREADY_EA_BASE_URL=http://10.255.255.1/x php -S localhost:8012 -t backend/public backend/public/index.php",
+      "item": [
+        {
+          "name": "Stations search - valid (colwick)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has items array and fetchedAt', () => { const j = pm.response.json(); pm.expect(j.items).to.be.an('array'); pm.expect(j).to.have.property('fetchedAt'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations?search=colwick&limit=3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "colwick"
+                },
+                {
+                  "key": "limit",
+                  "value": "3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Stations search - no matches (empty list, still 200)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Items empty', () => pm.expect(pm.response.json().items).to.have.lengthOf(0));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations?search=Zzzzqq",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Zzzzqq"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Stations search - missing search (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Error code is BAD_REQUEST', () => pm.expect(pm.response.json().error.code).to.eql('BAD_REQUEST'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Stations search - limit too big (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Error code is BAD_REQUEST', () => pm.expect(pm.response.json().error.code).to.eql('BAD_REQUEST'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations?search=a&limit=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "a"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Stations search - limit not a number (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Error code is BAD_REQUEST', () => pm.expect(pm.response.json().error.code).to.eql('BAD_REQUEST'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations?search=a&limit=abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "a"
+                },
+                {
+                  "key": "limit",
+                  "value": "abc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Station details - valid (4009)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has measures with latest', () => { const s = pm.response.json().station; pm.expect(s.reference).to.eql('4009'); pm.expect(s.measures[0]).to.have.property('latest'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations/4009",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations",
+                "4009"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Station details - two measures (1029TH)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Two measures', () => pm.expect(pm.response.json().station.measures).to.have.lengthOf(2));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations/1029TH",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations",
+                "1029TH"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Station details - nonexistent ref (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Error code is NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('NOT_FOUND'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations/NOPE999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations",
+                "NOPE999"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Station details - invalid ref chars (400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Error code is BAD_REQUEST', () => pm.expect(pm.response.json().error.code).to.eql('BAD_REQUEST'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/stations/bad!ref",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "stations",
+                "bad!ref"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Overview - seeded location 1, EA ok",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has location, actions, external', () => { const j = pm.response.json(); pm.expect(j.location.id).to.eql(1); pm.expect(j.actions).to.be.an('array'); pm.expect(j.external.status).to.be.oneOf(['ok','empty']); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/locations/1/overview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "locations",
+                "1",
+                "overview"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Overview - unknown location (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Error code is NOT_FOUND', () => pm.expect(pm.response.json().error.code).to.eql('NOT_FOUND'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/locations/999999/overview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "locations",
+                "999999",
+                "overview"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Overview - invalid id (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 422', () => pm.response.to.have.status(422));",
+                  "pm.test('Error code is VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/locations/abc/overview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "locations",
+                "abc",
+                "overview"
+              ]
+            }
+          }
+        },
+        {
+          "name": "FAILURE SIM: stations search, EA host unreachable (502)  [needs server on :8011]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 502', () => pm.response.to.have.status(502));",
+                  "pm.test('Error code is EA_UNAVAILABLE', () => pm.expect(pm.response.json().error.code).to.eql('EA_UNAVAILABLE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlEaDown}}/api/stations?search=Colwick",
+              "host": [
+                "{{baseUrlEaDown}}"
+              ],
+              "path": [
+                "api",
+                "stations"
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Colwick"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "FAILURE SIM: station details, EA host unreachable (502)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 502', () => pm.response.to.have.status(502));",
+                  "pm.test('Error code is EA_UNAVAILABLE', () => pm.expect(pm.response.json().error.code).to.eql('EA_UNAVAILABLE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlEaDown}}/api/stations/4009",
+              "host": [
+                "{{baseUrlEaDown}}"
+              ],
+              "path": [
+                "api",
+                "stations",
+                "4009"
+              ]
+            }
+          }
+        },
+        {
+          "name": "FAILURE SIM: overview still 200 when EA unreachable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('external unavailable, stored data present', () => { const j = pm.response.json(); pm.expect(j.external.status).to.eql('unavailable'); pm.expect(j.external.data).to.eql(null); pm.expect(j.location.id).to.eql(1); pm.expect(j.actions).to.be.an('array'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlEaDown}}/api/locations/1/overview",
+              "host": [
+                "{{baseUrlEaDown}}"
+              ],
+              "path": [
+                "api",
+                "locations",
+                "1",
+                "overview"
+              ]
+            }
+          }
+        },
+        {
+          "name": "FAILURE SIM: station details, EA timeout (504)  [needs server on :8012]",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 504', () => pm.response.to.have.status(504));",
+                  "pm.test('Error code is EA_TIMEOUT', () => pm.expect(pm.response.json().error.code).to.eql('EA_TIMEOUT'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlEaSlow}}/api/stations/4009",
+              "host": [
+                "{{baseUrlEaSlow}}"
+              ],
+              "path": [
+                "api",
+                "stations",
+                "4009"
+              ]
+            }
+          }
+        },
+        {
+          "name": "FAILURE SIM: overview still 200 when EA times out",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('external timeout', () => { const j = pm.response.json(); pm.expect(j.external.status).to.eql('timeout'); pm.expect(j.location.id).to.eql(1); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrlEaSlow}}/api/locations/1/overview",
+              "host": [
+                "{{baseUrlEaSlow}}"
+              ],
+              "path": [
+                "api",
+                "locations",
+                "1",
+                "overview"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 Cleanup (delete location)",
       "item": [
         {
           "name": "Delete location - valid (cascades actions)",

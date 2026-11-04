@@ -5,10 +5,13 @@ declare(strict_types=1);
 
 use RiverReady\Controllers\ActionController;
 use RiverReady\Controllers\LocationController;
+use RiverReady\Controllers\OverviewController;
+use RiverReady\Controllers\StationController;
 use RiverReady\Http\Response;
 use RiverReady\Http\Router;
 use RiverReady\Repositories\ActionRepository;
 use RiverReady\Repositories\LocationRepository;
+use RiverReady\Services\EaClient;
 
 // Tiny PSR-4 style autoloader: RiverReady\Http\Router -> src/Http/Router.php
 spl_autoload_register(static function (string $class): void {
@@ -41,16 +44,38 @@ set_exception_handler(static function (Throwable $e): void {
     }
 });
 
-/** Lazy shared PDO connection (config is read only when the DB is first used). */
-function db(): PDO
+/** Lazy, cached read of config/config.php (only touched when something needs it). */
+function config(): array
 {
-    static $pdo = null;
-    if ($pdo === null) {
+    static $cfg = null;
+    if ($cfg === null) {
         $path = __DIR__ . '/../config/config.php';
         if (!is_file($path)) {
             throw new RuntimeException('config/config.php is missing');
         }
-        $c = (require $path)['db'];
+        $cfg = require $path;
+    }
+    return $cfg;
+}
+
+/** EA settings from config. Env vars let me simulate failures without editing config (e.g. a bad host). */
+function eaConfig(): array
+{
+    $ea = config()['ea'] ?? [];
+    foreach (['base_url' => 'RIVERREADY_EA_BASE_URL', 'timeout' => 'RIVERREADY_EA_TIMEOUT', 'connect_timeout' => 'RIVERREADY_EA_CONNECT_TIMEOUT'] as $key => $env) {
+        if (getenv($env) !== false && getenv($env) !== '') {
+            $ea[$key] = getenv($env);
+        }
+    }
+    return $ea;
+}
+
+/** Lazy shared PDO connection. */
+function db(): PDO
+{
+    static $pdo = null;
+    if ($pdo === null) {
+        $c = config()['db'];
         $pdo = new PDO(
             "mysql:host={$c['host']};dbname={$c['name']};charset=utf8mb4",
             $c['user'],
@@ -91,6 +116,14 @@ $router->add('GET',    '/api/locations/{id}/actions',    static fn (array $p) =>
 $router->add('POST',   '/api/locations/{id}/actions',    static fn (array $p) => $actions()->store($p));
 $router->add('PUT',    '/api/actions/{id}',              static fn (array $p) => $actions()->update($p));
 $router->add('DELETE', '/api/actions/{id}',              static fn (array $p) => $actions()->destroy($p));
+
+$ea       = static fn () => new EaClient(eaConfig());
+$stations = static fn () => new StationController($ea());
+$overview = static fn () => new OverviewController(new LocationRepository(db()), new ActionRepository(db()), $ea());
+
+$router->add('GET', '/api/stations',                    static fn (array $p) => $stations()->search($p));
+$router->add('GET', '/api/stations/{ref}',              static fn (array $p) => $stations()->show($p));
+$router->add('GET', '/api/locations/{id}/overview',     static fn (array $p) => $overview()->show($p));
 
 // Route path: everything from "/api" onward, so it works under any sub-folder on the host.
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
