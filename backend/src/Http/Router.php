@@ -33,7 +33,12 @@ final class Router
             if ($route['method'] === $method) {
                 // Keep only named captures (the {id} style params)
                 $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-                ($route['handler'])($params);
+                try {
+                    ($route['handler'])($params);
+                } catch (ApiException $e) {
+                    // Expected client error: safe message only
+                    Response::error($e->status(), $e->errorCode(), $e->getMessage(), $e->fields());
+                }
                 return;
             }
             $allowed[] = $route['method'];

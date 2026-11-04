@@ -3,8 +3,12 @@ declare(strict_types=1);
 
 // Front controller: every request lands here (via .htaccess or `php -S ... index.php`).
 
+use RiverReady\Controllers\ActionController;
+use RiverReady\Controllers\LocationController;
 use RiverReady\Http\Response;
 use RiverReady\Http\Router;
+use RiverReady\Repositories\ActionRepository;
+use RiverReady\Repositories\LocationRepository;
 
 // Tiny PSR-4 style autoloader: RiverReady\Http\Router -> src/Http/Router.php
 spl_autoload_register(static function (string $class): void {
@@ -73,6 +77,20 @@ $router->add('GET', '/api/health', static function (): void {
     }
     Response::json(200, ['status' => 'ok', 'database' => 'ok', 'time' => gmdate('c')]);
 });
+
+// Controllers are built lazily inside the closures so DB config is only read when needed.
+$locations = static fn () => new LocationController(new LocationRepository(db()));
+$actions   = static fn () => new ActionController(new ActionRepository(db()), new LocationRepository(db()));
+
+$router->add('GET',    '/api/locations',                 static fn (array $p) => $locations()->index($p));
+$router->add('POST',   '/api/locations',                 static fn (array $p) => $locations()->store($p));
+$router->add('GET',    '/api/locations/{id}',            static fn (array $p) => $locations()->show($p));
+$router->add('PUT',    '/api/locations/{id}',            static fn (array $p) => $locations()->update($p));
+$router->add('DELETE', '/api/locations/{id}',            static fn (array $p) => $locations()->destroy($p));
+$router->add('GET',    '/api/locations/{id}/actions',    static fn (array $p) => $actions()->index($p));
+$router->add('POST',   '/api/locations/{id}/actions',    static fn (array $p) => $actions()->store($p));
+$router->add('PUT',    '/api/actions/{id}',              static fn (array $p) => $actions()->update($p));
+$router->add('DELETE', '/api/actions/{id}',              static fn (array $p) => $actions()->destroy($p));
 
 // Route path: everything from "/api" onward, so it works under any sub-folder on the host.
 $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';

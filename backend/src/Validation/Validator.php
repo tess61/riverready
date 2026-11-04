@@ -58,6 +58,15 @@ final class Validator
         return $this;
     }
 
+    /** true/false or 0/1 (used for is_done). */
+    public function boolean(string $field, $value): self
+    {
+        if ($value !== null && !isset($this->errors[$field]) && !in_array($value, [true, false, 0, 1], true)) {
+            $this->errors[$field] = 'must be true or false';
+        }
+        return $this;
+    }
+
     /** Positive integer; accepts ints or digit-only strings (URL params). */
     public function positiveInt(string $field, $value): self
     {

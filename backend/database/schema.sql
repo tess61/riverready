@@ -34,12 +34,11 @@ CREATE TABLE actions (
   INDEX idx_location (location_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Seed data for demo/testing. Station references are placeholders to be
--- checked against the live EA API in Phase 3.
+-- Seed data for demo/testing. Station references are real EA stations; town is NULL where unsure.
 INSERT INTO locations (name, station_reference, station_label, river_name, town, notes, risk_note) VALUES
-  ('Family home', '1029TH', 'Demo station A', 'River Thames', 'Oxford', 'Ground floor flat near the river path.', 'Garden floods first in wet winters.'),
-  ('Grandparents'' house', '2067', 'Demo station B', 'River Severn', 'Bewdley', 'Lives alone, needs help moving items upstairs.', NULL),
-  ('Student house', '4009', 'Demo station C', 'River Tyne', 'Newcastle', NULL, 'Cellar is used for storage.');
+  ('Family home', '1029TH', 'Bourton Dickler', 'River Dikler', 'Bourton-on-the-Water', 'Ground floor flat near the river path.', 'Garden floods first in wet winters.'),
+  ('Grandparents'' house', '2067', 'Swindon', 'Smestow Brook', NULL, 'Lives alone, needs help moving items upstairs.', NULL),
+  ('Student house', '4009', 'Colwick', 'River Trent', NULL, NULL, 'Cellar is used for storage.');
 
 INSERT INTO actions (location_id, title, description, category, priority, due_date, is_done) VALUES
   (1, 'Copy insurance documents', 'Keep a copy in a waterproof folder upstairs.', 'documents', 'high', '2026-12-01', 0),
