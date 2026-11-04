@@ -1,3 +1,5 @@
+import { WarningIcon } from './icons/index.jsx';
+
 // Formatting helpers + stale check shared by search preview and detail page.
 export const STALE_HOURS = 6; // readings older than this get a warning
 
@@ -21,12 +23,12 @@ export function MeasureList({ measures }) {
           <h3>{m.name || 'Measurement'}</h3>
           {m.latest ? (
             <>
-              <p className="value"><span>{m.latest.value}</span> {m.unit || ''}</p>
-              <p className="muted small">
+              <p className="value"><span className="num">{m.latest.value}</span> <span className="unit">{m.unit || ''}</span></p>
+              <p className="meta">
                 Updated {fmtDate(m.latest.dateTime)}
-                {isStale(m.latest.dateTime) && <strong className="stale"> Reading may be out of date</strong>}
+                {isStale(m.latest.dateTime) && <strong className="stale"><WarningIcon size={16} />Reading may be out of date</strong>}
               </p>
-              {m.typicalRange && <p className="muted small">Typical range {m.typicalRange.low}–{m.typicalRange.high} {m.unit || ''}</p>}
+              {m.typicalRange && <p className="meta">Typical range {m.typicalRange.low}–{m.typicalRange.high} {m.unit || ''}</p>}
             </>
           ) : <p className="muted">No reading available right now.</p>}
         </li>

@@ -16,3 +16,4 @@ backend/cache/
 .vscode/
 .DS_Store
 .env.production
+.jury/

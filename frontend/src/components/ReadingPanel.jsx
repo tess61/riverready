@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { MeasureList, fmtDate } from './Reading.jsx';
 import StatusChip from './StatusChip.jsx';
+import { RetryButton } from './Feedback.jsx';
+import { ClockIcon, WarningIcon, WifiOffIcon } from './icons/index.jsx';
 import { getStatus, isStale, pickPrimary } from '../lib/status.js';
 
 const TrendPanel = lazy(() => import('./TrendPanel.jsx')); // separate chunk, only fetched on this page
@@ -16,18 +18,18 @@ export default function ReadingPanel({ external, onRetry }) {
   };
   const primary = status === 'ok' ? pickPrimary(external.data?.measures) : null;
   return (
-    <section className="panel" aria-labelledby="live-h">
+    <section className="panel panel-live" aria-labelledby="live-h">
       <h2 id="live-h">Live readings</h2>
       {status === 'ok' ? (
         <>
           {primary && (
-            <p className="status-line">
-              <StatusChip status={getStatus(primary)} />
-              <span className="muted small">
-                {primary.name} · updated {fmtDate(primary.latest.dateTime)}
-                {isStale(primary.latest.dateTime) && <strong className="stale"> ⚠ Reading may be out of date</strong>}
-              </span>
-            </p>
+            <div className="status-line">
+              <StatusChip status={getStatus(primary)} large />
+              <p className="meta">
+                <ClockIcon size={16} />{primary.name}, updated {fmtDate(primary.latest.dateTime)}
+              </p>
+              {isStale(primary.latest.dateTime) && <p className="meta stale"><WarningIcon size={16} />Reading may be out of date</p>}
+            </div>
           )}
           <MeasureList measures={external.data?.measures} />
           {primary?.id && (
@@ -35,12 +37,15 @@ export default function ReadingPanel({ external, onRetry }) {
               <TrendPanel measure={primary} />
             </Suspense>
           )}
-          <p className="muted small">Source: Environment Agency · fetched {fmtDate(external.fetchedAt)}</p>
+          <p className="source small">Source: Environment Agency. Fetched {fmtDate(external.fetchedAt)}.</p>
         </>
       ) : (
         <div className="fb fb-warn" role="status" aria-live="polite">
-          <p>{messages[status] || messages.unavailable}</p>
-          <button type="button" className="btn" onClick={onRetry}>Retry</button>
+          <WifiOffIcon className="fb-icon" size={24} />
+          <div>
+            <p>{messages[status] || messages.unavailable}</p>
+            <RetryButton onClick={onRetry} />
+          </div>
         </div>
       )}
     </section>

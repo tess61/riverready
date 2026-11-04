@@ -6,15 +6,15 @@ export function pickPrimary(measures) {
   return withLatest.find((m) => m.typicalRange) || withLatest.find((m) => m.parameter === 'level') || withLatest[0] || null;
 }
 
-// Status from the latest value vs EA's typical range. Each status has text AND an icon (never colour only).
+// Status from the latest value vs EA's typical range. StatusChip pairs each key with text AND an icon shape.
 export function getStatus(m) {
-  if (!m || !m.latest) return { key: 'nodata', label: 'No data', icon: '○' };
+  if (!m || !m.latest) return { key: 'nodata', label: 'No data' };
   const r = m.typicalRange;
-  if (!r) return { key: 'reading', label: 'Reading only', icon: '◆' };
+  if (!r) return { key: 'reading', label: 'Reading only' };
   const v = m.latest.value;
-  if (v > r.high) return { key: 'high', label: 'High', icon: '▲' };
-  if (v < r.low) return { key: 'low', label: 'Low', icon: '▼' };
-  return { key: 'normal', label: 'Normal', icon: '✓' };
+  if (v > r.high) return { key: 'high', label: 'High' };
+  if (v < r.low) return { key: 'low', label: 'Low' };
+  return { key: 'normal', label: 'Normal' };
 }
 
 export { isStale };
@@ -26,7 +26,16 @@ export function getTrend(points) {
   const first = avg(points.slice(0, 3));
   const last = avg(points.slice(-3));
   const limit = Math.max(0.02, Math.abs(avg(points)) * 0.03);
-  if (last - first > limit) return { key: 'rising', label: 'Rising', icon: '↑' };
-  if (first - last > limit) return { key: 'falling', label: 'Falling', icon: '↓' };
-  return { key: 'steady', label: 'Steady', icon: '→' };
+  if (last - first > limit) return { key: 'rising', label: 'Rising' };
+  if (first - last > limit) return { key: 'falling', label: 'Falling' };
+  return { key: 'steady', label: 'Steady' };
+}
+
+// Gauge fill (0-100) for the card accent. The typical range maps to 25-75%, so "normal" sits mid-tube.
+// Decorative only: the chip and number carry the meaning.
+export function levelPct(m) {
+  const r = m?.typicalRange;
+  if (!m?.latest || !r || r.high <= r.low) return null;
+  const pct = 25 + ((m.latest.value - r.low) / (r.high - r.low)) * 50;
+  return Math.max(4, Math.min(100, Math.round(pct)));
 }

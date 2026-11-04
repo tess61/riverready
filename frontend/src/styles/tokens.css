@@ -1,19 +1,120 @@
+/* Design tokens. Restyling = edit this file only.
+   The theme is always set on <html data-theme> by the boot script in index.html
+   (saved choice, else the system preference), so each set is defined once. */
 :root {
-  --bg: #f5f7f8;
-  --surface: #ffffff;
-  --text: #17262b;
-  --muted: #4d6168;
-  --border: #c9d5d9;
-  --primary: #0f4c5c;
-  --primary-text: #ffffff;
-  --focus: #b45309;
-  --danger: #a3260f;
-  --danger-bg: #fdecea;
-  --warn-bg: #fff4d6;
-  --ok: #17603a;
-  --ok-bg: #e4f4ea;
-  --radius: 8px;
-  --gap: 1rem;
+  /* Type: system fonts only (no font requests). Scale ratio 1.25 (major third). */
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-display: "Avenir Next", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  --font-num: ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", var(--font);
+  --fs-xs: .8rem;
+  --fs-sm: .875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.25rem;
+  --fs-lg: 1.563rem;
+  --fs-xl: 1.953rem;
+  --fs-2xl: clamp(2rem, 6vw, 3.05rem);
+  --fs-num: clamp(2.75rem, 12vw, 4.25rem);
+
+  /* Space (4px base) and shape. Radii differ by hierarchy: panels > cards > controls. */
+  --sp-1: .25rem; --sp-2: .5rem; --sp-3: .75rem; --sp-4: 1rem; --sp-5: 1.5rem; --sp-6: 2rem; --sp-7: 3rem;
+  --gap: var(--sp-4);
+  --r-sm: 6px;
+  --radius: 10px;
+  --r-lg: 22px;
+  --r-pill: 999px;
   --tap: 44px;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Motion */
+  --ease: cubic-bezier(.2, .7, .2, 1);          /* feedback: fast out */
+  --ease-inout: cubic-bezier(.65, 0, .35, 1);   /* page changes: water rising, symmetric */
+  --t-fast: 120ms;
+  --t-med: 240ms;
+  --t-slow: 700ms;
+}
+
+:root, :root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f1ede3;            /* warm off-white, like dry sand */
+  --bg-line: #e3dccd;       /* contour lines in the page background */
+  /* Topographic contour tile (inline SVG data, no request). Line colour = --bg-line. */
+  --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' fill='none' stroke='%23e3dccd' stroke-width='1.3'%3E%3Cpath d='M0 30C150 12 150 40 300 30S450 48 600 30M0 78C150 64 150 100 300 78S450 92 600 78M0 112C150 92 150 120 300 112S450 132 600 112M0 196C150 186 150 222 300 196S450 206 600 196M0 236C150 214 150 250 300 236S450 258 600 236M0 300C150 288 150 318 300 300S450 312 600 300M0 352C150 328 150 358 300 352S450 376 600 352'/%3E%3C/svg%3E");
+  --surface: #fbf9f4;
+  --surface-2: #ece6d9;
+  --text: #241c15;          /* umber ink */
+  --muted: #5d5246;
+  --border: #d3c9b6;
+  --border-strong: #8d7f6c;
+
+  --primary: #0c5c60;       /* river teal */
+  --primary-hover: #08474a;
+  --primary-text: #ffffff;
+  --primary-deep: #063a3c;   /* 'ledge' under primary buttons */
+  --water: #1d8a8a;         /* decorative water (sparkline, gauges) */
+  --water-soft: #bfe0dc;
+  --clay: #a3432a;
+  --ochre: #c49233;
+  --moss: #5b7432;
+  --slate: #4f5a63;
+  --focus: #8a5a00;         /* amber ring: distinct from clay (errors/delete); 4.8:1+ on every surface */
+
+  /* Status: text colour + tinted background + border. */
+  --ok: #3c5a1c;     --ok-bg: #e5ecd2;
+  --danger: #9a3720; --danger-bg: #f6e0d6;
+  --warn: #6e4b07;   --warn-bg: #f6e7c4;
+  --none: #4f5a63;   --none-bg: #e6e3dc;
+
+  /* Earth band (header). Darker than the page in both themes. */
+  --band: #3a2a1e;
+  --band-text: #f7efe2;
+  --band-focus: #f3b27c;
+  --band-clay: #7c3a22;
+  --band-ochre: #8f6a26;
+  --band-moss: #4c5a2c;
+  --band-river: #2a9d98;
+  --band-river-hi: #8fd6cf;
+
+  --shadow-1: 0 1px 2px rgb(58 42 30 / .08), 0 2px 6px rgb(58 42 30 / .06);
+  --shadow-2: 0 2px 4px rgb(58 42 30 / .08), 0 12px 24px -8px rgb(58 42 30 / .22);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1b1511;            /* deep umber */
+  --bg-line: #271f19;
+  --bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' fill='none' stroke='%23271f19' stroke-width='1.3'%3E%3Cpath d='M0 30C150 12 150 40 300 30S450 48 600 30M0 78C150 64 150 100 300 78S450 92 600 78M0 112C150 92 150 120 300 112S450 132 600 112M0 196C150 186 150 222 300 196S450 206 600 196M0 236C150 214 150 250 300 236S450 258 600 236M0 300C150 288 150 318 300 300S450 312 600 300M0 352C150 328 150 358 300 352S450 376 600 352'/%3E%3C/svg%3E");
+  --surface: #251d17;
+  --surface-2: #30261e;
+  --text: #f2eadd;
+  --muted: #c2b4a2;
+  --border: #45382d;
+  --border-strong: #8a7a68;
+
+  --primary: #6cc9c2;
+  --primary-hover: #8fd8d1;
+  --primary-text: #0f2423;
+  --primary-deep: #2f8d87;
+  --water: #4fb8b1;
+  --water-soft: #1f4644;
+  --clay: #e48a68;
+  --ochre: #dcb25e;
+  --moss: #a9c26f;
+  --slate: #a7b1b9;
+  --focus: #f2c14e;
+
+  --ok: #b6cf7f;     --ok-bg: #2a3119;
+  --danger: #f29a7a; --danger-bg: #3d2017;
+  --warn: #e9c172;   --warn-bg: #3a2c10;
+  --none: #bcc3c9;   --none-bg: #2c2a28;
+
+  --band: #2b2018;           /* a step lighter than the page so the band reads as a layer */
+  --band-text: #f2eadd;
+  --band-focus: #f3b27c;
+  --band-clay: #4a2416;
+  --band-ochre: #4e3b17;
+  --band-moss: #2c3419;
+  --band-river: #1f7d79;
+  --band-river-hi: #6cc9c2;
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / .4);
+  --shadow-2: 0 2px 4px rgb(0 0 0 / .35), 0 14px 28px -10px rgb(0 0 0 / .6);
 }

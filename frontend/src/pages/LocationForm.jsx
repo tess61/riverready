@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { api } from '../api/client.js';
 import { useApi } from '../hooks/useApi.js';
+import { useTitle } from '../hooks/useTitle.js';
 import Field from '../components/Field.jsx';
 import { ErrorNotice, Loading, Success } from '../components/Feedback.jsx';
+import { CheckIcon } from '../components/icons/index.jsx';
 
 const EMPTY = { name: '', station_reference: '', station_label: '', river_name: '', town: '', notes: '', risk_note: '' };
 
@@ -18,6 +20,7 @@ export default function LocationForm() {
   const [formError, setFormError] = useState(null);
   const [pending, setPending] = useState(false);
   const [saved, setSaved] = useState('');
+  useTitle(id ? 'Edit location' : 'Save as location');
 
   // Source of initial values: the stored location (edit) or the chosen EA station (create).
   const source = useApi(id ? (s) => api.getLocation(id, s) : ref ? (s) => api.getStation(ref, s) : null, [id, ref]);
@@ -55,10 +58,17 @@ export default function LocationForm() {
   if (id && source.error) return <ErrorNotice error={source.error} onRetry={source.reload} title="Could not load this location" />;
 
   return (
-    <>
-      <h1>{id ? 'Edit location' : 'Save as location'}</h1>
+    <div className="form-page">
+      <div className="page-intro">
+        <h1>{id ? 'Edit location' : 'Save as location'}</h1>
+        <p className="lede">
+          {id
+            ? 'Update the name, notes or your own risk note for this place.'
+            : 'Give this place a name you will recognise. Station details come from the Environment Agency and you can edit them.'}
+        </p>
+      </div>
       {!id && source.error && <p className="fb fb-warn" role="status">Station details could not be loaded. You can still save with the reference {ref}.</p>}
-      <form onSubmit={submit} noValidate className="form">
+      <form onSubmit={submit} noValidate className="form panel">
         <Field label="Location name" name="name" value={form.name} onChange={change} error={errors.name} required maxLength={100} hint="For example: Home, Mum's house" />
         <Field label="Station reference" name="station_reference" value={form.station_reference} onChange={change} error={errors.station_reference} required maxLength={50} readOnly={!id} />
         <Field label="Station name" name="station_label" value={form.station_label} onChange={change} error={errors.station_label} maxLength={150} />
@@ -70,10 +80,10 @@ export default function LocationForm() {
         {formError && Object.keys(errors).length > 0 && <p className="field-error" role="alert">Please fix the highlighted fields.</p>}
         <Success message={saved} />
         <div className="actions">
-          <button className="btn btn-primary" disabled={pending}>{pending ? 'Saving…' : 'Save location'}</button>
+          <button className="btn btn-primary" disabled={pending}><CheckIcon size={18} />{pending ? 'Saving…' : 'Save location'}</button>
           <Link className="btn" to={id ? `/locations/${id}` : '/search'}>Cancel</Link>
         </div>
       </form>
-    </>
+    </div>
   );
 }

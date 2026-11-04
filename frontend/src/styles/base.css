@@ -1,28 +1,179 @@
+/* Base: reset, type, shell (header band, page, fixed disclaimer), motion rules. Colours come from tokens.css. */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 1rem/1.5 var(--font); }
-h1 { font-size: 1.6rem; line-height: 1.2; margin: 0 0 var(--gap); }
-h2 { font-size: 1.2rem; margin: 0 0 .5rem; }
-h3 { font-size: 1rem; margin: 0; }
-p { margin: 0 0 .5rem; }
-a { color: var(--primary); }
+body {
+  margin: 0;
+  background: var(--bg-pattern) 0 0 / 600px 400px, var(--bg);
+  color: var(--text);
+  font: var(--fs-base)/1.55 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+h1 {
+  font: 800 var(--fs-2xl)/1.05 var(--font-display);
+  letter-spacing: -.03em;
+  margin: 0 0 var(--sp-3);
+  text-wrap: balance;
+}
+h2 { font: 750 var(--fs-md)/1.2 var(--font-display); letter-spacing: -.015em; margin: 0 0 var(--sp-3); }
+h3 { font-size: var(--fs-base); font-weight: 700; margin: 0; }
+p { margin: 0 0 var(--sp-2); }
+a { color: var(--primary); text-underline-offset: 3px; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.icon { flex: none; }
 .muted { color: var(--muted); }
-.small { font-size: .875rem; }
+.small { font-size: var(--fs-sm); }
 .pre { white-space: pre-wrap; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Smooth theme change on the large surfaces only (cheaper than transitioning everything). */
+body, .site-header, .card, .panel, .action, .disclaimer, .btn, .field input, .field textarea, .field select {
+  transition: background-color var(--t-med) var(--ease), color var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
+}
 
 .shell { min-height: 100vh; display: flex; flex-direction: column; }
-.skip { position: absolute; left: -999px; background: var(--surface); padding: .5rem 1rem; z-index: 10; }
-.skip:focus { left: 0; top: 0; }
-.site-header { background: var(--primary); display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; padding: .25rem 1rem; }
-.site-header a { color: var(--primary-text); text-decoration: none; display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 .5rem; border-bottom: 3px solid transparent; }
-.site-header .brand { font-weight: 700; font-size: 1.15rem; padding-left: 0; }
-.site-header nav { display: flex; gap: .25rem; }
-.site-header nav a.active { border-bottom-color: var(--primary-text); }
-.site-header :focus-visible { outline-color: #fff; }
-.page { flex: 1; width: 100%; max-width: 48rem; margin: 0 auto; padding: 1rem 1rem 5rem; }
+.skip { position: absolute; left: -999px; top: 0; z-index: 20; background: var(--surface); color: var(--primary); padding: .75rem 1rem; font-weight: 700; }
+.skip:focus { left: var(--sp-2); top: var(--sp-2); }
+
+/* ---- Header: the earth band ---- */
+.site-header { background: var(--band); color: var(--band-text); }
+.site-header :focus-visible { outline-color: var(--band-focus); }
+.header-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "brand toggle" "nav nav";
+  align-items: center;
+  gap: var(--sp-1) var(--sp-3);
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: var(--sp-2) var(--sp-4) 0;
+}
+.brand {
+  grid-area: brand;
+  display: inline-flex; align-items: center; gap: .6rem;
+  min-height: var(--tap);
+  color: var(--band-text);
+  font: 800 1.3rem/1 var(--font-display);
+  letter-spacing: -.03em;
+  text-decoration: none;
+}
+/* Leaf/droplet-shaped mark: one square corner gives it a direction, like water flowing. */
+.brand-mark {
+  display: grid; place-items: center;
+  transition: border-radius var(--t-med) var(--ease);
+  width: 2.25rem; height: 2.25rem;
+  border-radius: 50% 50% 50% 14%;
+  background: var(--band-river);
+  color: var(--band);
+}
+/* Logo answers like water: the droplet tips its point the other way and the waves drift. */
+.brand .icon { transition: translate var(--t-med) var(--ease); }
+@media (hover: hover) {
+  .brand:hover .brand-mark { border-radius: 14% 50% 50% 50%; }
+  .brand:hover .icon { translate: 3px 0; }
+}
+.brand:focus-visible .brand-mark { border-radius: 14% 50% 50% 50%; }
+.main-nav { grid-area: nav; display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+.main-nav a {
+  display: inline-flex; align-items: center; gap: .4rem;
+  min-height: var(--tap);
+  padding: 0 .8rem;
+  border-radius: var(--r-pill);
+  color: var(--band-text);
+  font-weight: 650;
+  text-decoration: none;
+}
+/* Nav answers with a water line that draws under the label while its icon rises. */
+.main-nav a {
+  background-image: linear-gradient(var(--band-river-hi) 0 0);
+  background-repeat: no-repeat;
+  background-position: center calc(100% - 7px);
+  background-size: 0 2px;
+  transition: background-size var(--t-med) var(--ease), background-color var(--t-med), color var(--t-med);
+}
+.main-nav .icon { transition: translate var(--t-med) var(--ease); }
+@media (hover: hover) {
+  .main-nav a:hover { background-size: calc(100% - 1.6rem) 2px; }
+  .main-nav a:hover .icon { translate: 0 -2px; }
+}
+.main-nav a:focus-visible { background-size: calc(100% - 1.6rem) 2px; }
+.main-nav a.active { background-color: var(--band-text); color: var(--band); background-image: linear-gradient(var(--primary) 0 0); }
+.main-nav .icon { display: none; }
+.theme-toggle {
+  grid-area: toggle;
+  display: grid; place-items: center;
+  width: var(--tap); height: var(--tap);
+  border-radius: 50%;
+  border: 1.5px solid rgb(255 255 255 / .35);
+  background: transparent;
+  color: var(--band-text);
+  cursor: pointer;
+}
+/* Toggle: the sun turns / the moon tips, and a soft fill rises behind it. */
+.theme-toggle {
+  background-image: linear-gradient(rgb(255 255 255 / .16) 0 0);
+  background-repeat: no-repeat; background-position: bottom; background-size: 100% 0%;
+  transition: background-size var(--t-med) var(--ease), transform var(--t-fast) var(--ease);
+}
+.theme-toggle .icon { transition: rotate var(--t-slow) var(--ease); }
+@media (hover: hover) {
+  .theme-toggle:hover { background-size: 100% 100%; }
+  .theme-toggle:hover .icon { rotate: -25deg; }
+}
+.theme-toggle:focus-visible { background-size: 100% 100%; }
+.theme-toggle:active { transform: scale(.94); }
+@media (min-width: 23rem) { .main-nav .icon { display: inline; } }
+@media (min-width: 48rem) {
+  .header-row { grid-template-columns: auto 1fr auto; grid-template-areas: "brand nav toggle"; padding-top: var(--sp-3); }
+  .main-nav { justify-content: flex-end; }
+}
+
+/* River artwork under the header row. "slice" crops rather than squashes the river. */
+/* Height eases between the tall home band and the slim inner band when you change page. */
+.river-band { display: block; width: 100%; height: 2.75rem; transition: height 900ms var(--ease-inout); }
+.river-band.is-tall { height: 5.5rem; }
+@media (min-width: 48rem) { .river-band { height: 3.5rem; } .river-band.is-tall { height: 9rem; } }
+.rb-moss { fill: var(--band-moss); }
+.rb-ochre { fill: var(--band-ochre); }
+.rb-clay { fill: var(--band-clay); }
+.rb-contours path { fill: none; stroke: var(--band-text); stroke-opacity: .14; stroke-width: 1.5; }
+.rb-bank, .rb-river, .rb-flow { fill: none; stroke-linecap: round; }
+.rb-bank { stroke: #000; stroke-opacity: .28; stroke-width: 32; }
+.rb-river { stroke: var(--band-river); stroke-width: 20; }
+/* Dash period is 48 (14 + 34); offset moves 10 periods so the loop is seamless. */
+.rb-flow { stroke: var(--band-river-hi); stroke-width: 2.5; stroke-dasharray: 14 34; animation: flow 9s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -480; } }
+
+/* ---- Page + footer ---- */
+.page { flex: 1; width: 100%; max-width: 72rem; margin: 0 auto; padding: var(--sp-5) var(--sp-4) 8rem; }
 .page:focus { outline: none; }
-/* Fixed footer so the disclaimer is always visible; page has bottom padding to avoid overlap. */
-.disclaimer { position: fixed; bottom: 0; left: 0; right: 0; background: #e7eef0; border-top: 1px solid var(--border); padding: .5rem 1rem; font-size: .8rem; color: var(--text); }
-@media (min-width: 40rem) { h1 { font-size: 2rem; } .page { padding-top: 1.5rem; } }
-@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+/* Page change: the new page rises in like water (not on first load, which keeps LCP fast). */
+.page-enter.is-moving { animation: rise-in 640ms var(--ease-inout) both; }
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px); } }
+/* Fixed footer so the disclaimer is always visible; .page has bottom padding to avoid overlap. */
+.disclaimer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  display: flex; justify-content: center; align-items: flex-start; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4) calc(var(--sp-2) + env(safe-area-inset-bottom));
+  background: var(--surface-2);
+  border-top: 3px solid var(--ochre);
+  border-image: linear-gradient(90deg, var(--moss), var(--ochre), var(--clay)) 1;
+  color: var(--text);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+.disclaimer .icon { color: var(--primary); margin-top: 1px; }
+.disclaimer p { margin: 0; max-width: 60rem; }
+@media (min-width: 40rem) { .page { padding-top: var(--sp-6); padding-bottom: 5.5rem; } }
+
+/* Respect reduced motion everywhere: animations stop, transitions become instant. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

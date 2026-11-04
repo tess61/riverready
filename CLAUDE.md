@@ -22,7 +22,16 @@
 ### Skills and design effort
 - Only invoke the `frontend-design` skill in Phases 4-5 (UI work). Do not load it in any other phase.
 - When using it: "Use frontend-design for the components, keep plain CSS, mobile-first."
-- Do not produce an elaborate visual identity. The brief rewards working functionality and integration first, and design polish is not a marked criterion on its own. Aim for clean, consistent, accessible, not fancy.
+- Phases 4-5 (functionality) were built with a deliberately plain look. That restriction no longer applies: core functionality is complete and tested, so **Phase 5b (visual redesign) is explicitly allowed to be bold, creative and distinctive.**
+- Phase 5b direction: modern and bold, earthy river identity (see section 2b). Light AND dark mode. Custom inline-SVG icon set. Memorable but never at the cost of the guardrails below.
+- Guardrails that still apply to any visual work: no behaviour/API/route/backend changes; WCAG AA contrast; visible focus; 44px tap targets; status never by colour alone; honour prefers-reduced-motion; no external requests (fonts, CDNs, images); original artwork only (nothing copied from Google Flood Hub, the Red Cross app or other brands); the disclaimer stays visible; production build must pass with no noticeable bundle-size growth; PWA manifest colours and icons must match the final palette.
+
+### 2b. Visual identity (Phase 5b)
+- Concept: a river seen from above, flowing through earth. Palette from natural pigments: deep river teal/blue-green, clay/terracotta, ochre/sand, moss/olive, slate, warm off-white (light mode) and deep umber/charcoal-brown (dark mode). Define all colours as tokens in `src/styles/tokens.css` with light and dark sets, so restyling means editing tokens only.
+- Status colours (normal/elevated/high/no data) must stay distinguishable and always paired with text + icon/shape.
+- Bold typographic hierarchy using system fonts, or ONE self-hosted open-licence (OFL) variable font under ~60KB if it clearly adds value; no font CDNs.
+- Signature elements welcome: flowing wave/contour SVG shapes, layered organic backgrounds, strong large numerals for readings, expressive cards, tasteful micro-interactions (CSS only, reduced-motion safe).
+- Keep the CSS organised (tokens, base, components); components stay under ~150 lines; no new dependencies.
 
 ## 1. Brief constraints (pass/fail items marked ★)
 - ★ Backend: **PHP REST API** (JSON over HTTP). No framework required; plain PHP 8.x with PDO.

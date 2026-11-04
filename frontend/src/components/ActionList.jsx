@@ -5,6 +5,7 @@ import { ErrorNotice, Empty, Success } from './Feedback.jsx';
 import ActionForm from './ActionForm.jsx';
 import ActionItem from './ActionItem.jsx';
 import ProgressBar from './ProgressBar.jsx';
+import { AddIcon, ChecklistIcon, SparkIcon } from './icons/index.jsx';
 
 // Checklist for one location: progress, category filter, add/edit/delete, done toggle, starter list.
 export default function ActionList({ locationId, initial }) {
@@ -20,8 +21,8 @@ export default function ActionList({ locationId, initial }) {
   const submit = async (data) => { await save(data, form === 'new' ? null : form.id); setForm(null); };
 
   return (
-    <section className="panel" aria-labelledby="act-h">
-      <h2 id="act-h">Preparedness actions</h2>
+    <section className="panel panel-actions" aria-labelledby="act-h">
+      <h2 id="act-h" className="panel-title"><ChecklistIcon size={24} />Preparedness actions</h2>
       {actions.length > 0 && <ProgressBar done={done} total={actions.length} />}
       <Success message={notice} />
       {error && <ErrorNotice error={error} title="Could not update actions" />}
@@ -52,13 +53,13 @@ export default function ActionList({ locationId, initial }) {
         ? <ActionForm key={form === 'new' ? 'new' : form.id} initial={form === 'new' ? null : form} onSubmit={submit} onCancel={() => setForm(null)} />
         : (
           <div className="actions">
-            <button type="button" className="btn btn-primary" onClick={() => setForm('new')}>Add action</button>
+            <button type="button" className="btn btn-primary" onClick={() => setForm('new')}><AddIcon size={18} />Add action</button>
             <button type="button" className="btn" onClick={addTemplates} disabled={busyId === 'bulk'}>
-              {busyId === 'bulk' ? 'Adding…' : 'Add suggested actions'}
+              <SparkIcon size={18} />{busyId === 'bulk' ? 'Adding…' : 'Add suggested actions'}
             </button>
           </div>
         )}
-      <p className="muted small">Suggested actions are generic ideas only. They are not official advice.</p>
+      <p className="muted small panel-foot">Suggested actions are generic ideas only. They are not official advice.</p>
     </section>
   );
 }
