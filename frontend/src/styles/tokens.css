@@ -1,0 +1,19 @@
+:root {
+  --bg: #f5f7f8;
+  --surface: #ffffff;
+  --text: #17262b;
+  --muted: #4d6168;
+  --border: #c9d5d9;
+  --primary: #0f4c5c;
+  --primary-text: #ffffff;
+  --focus: #b45309;
+  --danger: #a3260f;
+  --danger-bg: #fdecea;
+  --warn-bg: #fff4d6;
+  --ok: #17603a;
+  --ok-bg: #e4f4ea;
+  --radius: 8px;
+  --gap: 1rem;
+  --tap: 44px;
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}

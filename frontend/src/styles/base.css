@@ -1,0 +1,28 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 1rem/1.5 var(--font); }
+h1 { font-size: 1.6rem; line-height: 1.2; margin: 0 0 var(--gap); }
+h2 { font-size: 1.2rem; margin: 0 0 .5rem; }
+h3 { font-size: 1rem; margin: 0; }
+p { margin: 0 0 .5rem; }
+a { color: var(--primary); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.muted { color: var(--muted); }
+.small { font-size: .875rem; }
+.pre { white-space: pre-wrap; }
+
+.shell { min-height: 100vh; display: flex; flex-direction: column; }
+.skip { position: absolute; left: -999px; background: var(--surface); padding: .5rem 1rem; z-index: 10; }
+.skip:focus { left: 0; top: 0; }
+.site-header { background: var(--primary); display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; padding: .25rem 1rem; }
+.site-header a { color: var(--primary-text); text-decoration: none; display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 .5rem; border-bottom: 3px solid transparent; }
+.site-header .brand { font-weight: 700; font-size: 1.15rem; padding-left: 0; }
+.site-header nav { display: flex; gap: .25rem; }
+.site-header nav a.active { border-bottom-color: var(--primary-text); }
+.site-header :focus-visible { outline-color: #fff; }
+.page { flex: 1; width: 100%; max-width: 48rem; margin: 0 auto; padding: 1rem 1rem 5rem; }
+.page:focus { outline: none; }
+/* Fixed footer so the disclaimer is always visible; page has bottom padding to avoid overlap. */
+.disclaimer { position: fixed; bottom: 0; left: 0; right: 0; background: #e7eef0; border-top: 1px solid var(--border); padding: .5rem 1rem; font-size: .8rem; color: var(--text); }
+@media (min-width: 40rem) { h1 { font-size: 2rem; } .page { padding-top: 1.5rem; } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
