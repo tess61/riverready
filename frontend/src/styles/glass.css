@@ -1,0 +1,24 @@
+/* Liquid glass. Every button, nav pill, card and panel has a translucent background (tokens.css --glass-*)
+   and its own refraction filter, added at runtime by hooks/useLiquidGlass.js (lib/liquid-glass.js).
+   This file holds the disclaimer's glass and the solid fallbacks. */
+
+/* Disclaimer: floating glass pill. */
+.glass { border-radius: var(--r-lg); }
+.glass-surface {
+  background: var(--glass-surface-2);
+  box-shadow: var(--glass-shadow), var(--glass-inset), 0 0 0 1px var(--border);
+}
+
+/* Solid colours wherever see-through surfaces would hurt readability or can't be blurred:
+   no color-mix() or no backdrop-filter support, reduced transparency requested, or forced colours. */
+@supports not (color: color-mix(in srgb, red 50%, transparent)) {
+  :root { --glass-chrome: var(--surface); --glass-surface: var(--surface); --glass-surface-2: var(--surface-2); --glass-primary: var(--primary); --glass-primary-hover: var(--primary-hover); }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass-chrome: var(--surface); --glass-surface: var(--surface); --glass-surface-2: var(--surface-2); --glass-primary: var(--primary); --glass-primary-hover: var(--primary-hover); }
+}
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  :root { --glass-chrome: var(--surface); --glass-surface: var(--surface); --glass-surface-2: var(--surface-2); --glass-primary: var(--primary); --glass-primary-hover: var(--primary-hover); }
+  /* !important beats the inline backdrop-filter the module sets, also if the setting changes while open. */
+  * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+}

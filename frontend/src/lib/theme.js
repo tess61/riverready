@@ -13,13 +13,13 @@ export function save(theme) {
 
 export const systemTheme = () => (media().matches ? 'dark' : 'light');
 
-// Apply to <html data-theme> and point the status-bar colour at the header band colour.
+// Apply to <html data-theme> and point the status-bar colour at the page background colour.
 export function apply(theme) {
   const root = document.documentElement;
   root.setAttribute('data-theme', theme);
-  const band = getComputedStyle(root).getPropertyValue('--band').trim();
+  const bg = getComputedStyle(root).getPropertyValue('--bg').trim();
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta && band) meta.setAttribute('content', band);
+  if (meta && bg) meta.setAttribute('content', bg);
 }
 
 // Follow system changes only while the user has not picked a theme. Returns an unsubscribe function.

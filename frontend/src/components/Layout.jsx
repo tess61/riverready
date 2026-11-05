@@ -2,14 +2,16 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Suspense, useLayoutEffect, useRef, useState } from 'react';
 import { Loading } from './Feedback.jsx';
 import Disclaimer from './Disclaimer.jsx';
-import RiverBand from './RiverBand.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
+import { useLiquidGlassAll } from '../hooks/useLiquidGlass.js';
 import { PinIcon, SearchIcon, WaveIcon } from './icons/index.jsx';
 
-// Shell: skip link, header (brand, nav, theme toggle, river artwork), page outlet, always-visible disclaimer.
+// Shell: skip link, sticky header (brand, nav, theme toggle as separate glass pills), page outlet, disclaimer.
+// The river-currents backdrop behind everything is pure CSS (body::before in base.css).
 export default function Layout() {
   const { pathname } = useLocation();
   const main = useRef(null);
+  useLiquidGlassAll(); // every button, nav pill, card and panel gets its own liquid glass
   const prev = useRef(pathname);
   const [moved, setMoved] = useState(false); // true after the first route change: enables the page-enter animation
   // When the route changes, move focus to <main> so keyboard/screen-reader users land on new content.
@@ -23,14 +25,14 @@ export default function Layout() {
     main.current?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }, [pathname]);
-  const home = pathname === '/';
   return (
     <div className="shell">
       <a className="skip" href="#main">Skip to content</a>
-      <header className={`site-header${home ? ' is-home' : ''}`}>
+      {/* The header sticks to the top; page content scrolls underneath its glass pills. */}
+      <header className="site-header">
         <div className="header-row">
           <NavLink to="/" className="brand">
-            <span className="brand-mark"><WaveIcon size={20} /></span>
+            <span className="brand-mark"><WaveIcon size={15} /></span>
             RiverReady
           </NavLink>
           <nav aria-label="Main" className="main-nav">
@@ -39,7 +41,6 @@ export default function Layout() {
           </nav>
           <ThemeToggle />
         </div>
-        <RiverBand tall={home} />
       </header>
       <main id="main" ref={main} tabIndex={-1} className="page">
         {/* Keyed wrapper: the new page "rises" in on each route change (CSS only, off under reduced motion). */}

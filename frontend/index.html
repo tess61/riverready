@@ -3,16 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#3a2a1e" />
+    <meta name="theme-color" content="#eef3f8" />
     <script>
       // Set the theme before first paint: saved choice, else the system preference.
-      // Colours match --band in src/styles/tokens.css (the header colour under the status bar).
+      // Colours match --bg in src/styles/tokens.css (the page colour under the status bar).
       (function () {
         var t = null;
         try { t = localStorage.getItem('rr-theme'); } catch (e) {}
         if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', t);
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', t === 'dark' ? '#2b2018' : '#3a2a1e');
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', t === 'dark' ? '#0a1020' : '#eef3f8');
       })();
     </script>
     <link rel="icon" type="image/png" sizes="192x192" href="%BASE_URL%icons/icon-192.png" />
@@ -26,7 +26,7 @@
   </head>
   <body>
     <!-- Static shell shown until React mounts (React replaces it). Gives crawlers and no-JS visitors a heading,
-         a main landmark and real text, and paints the header colour immediately. -->
+         a main landmark and real text, and reserves the header's height. -->
     <div id="root">
       <div class="boot">
         <div class="boot-band"><span>RiverReady</span></div>
@@ -39,14 +39,14 @@
       </div>
     </div>
     <style>
-      /* Heights match the real home header (188px phone, 200px desktop) so the swap to React causes no layout shift. */
-      .boot-band { box-sizing: border-box; height: 188px; background: var(--band, #3a2a1e); color: var(--band-text, #f7efe2); padding: 1.2rem 1rem 0; font: 800 1.3rem/1 system-ui, sans-serif; letter-spacing: -.03em; }
-      @media (min-width: 48rem) { .boot-band { height: 200px; } }
-      .boot-main { padding: 1.5rem 1rem; font: 1rem/1.55 system-ui, sans-serif; color: var(--text, #241c15); }
+      /* Heights match the real header (112px phone, 68px desktop) so the swap to React causes no layout shift. */
+      .boot-band { box-sizing: border-box; height: 112px; color: var(--text, #0d1830); padding: 1.4rem 1rem 0; font: 800 1.3rem/1 system-ui, sans-serif; letter-spacing: -.03em; }
+      @media (min-width: 48rem) { .boot-band { height: 68px; } }
+      .boot-main { padding: 1.5rem 1rem; font: 1rem/1.55 system-ui, sans-serif; color: var(--text, #0d1830); }
       @media (min-width: 40rem) { .boot-main { padding-top: 2rem; } }
       .boot-band span, .boot-main { display: block; max-width: 72rem; margin: 0 auto; }
       .boot-main h1 { font-size: clamp(2.4rem, 10vw, 4.25rem); letter-spacing: -.04em; line-height: 1.05; margin: 0 0 .75rem; }
-      .boot-main p { max-width: 36rem; color: var(--muted, #5d5246); margin: 0 0 .5rem; }
+      .boot-main p { max-width: 36rem; color: var(--muted, #46557a); margin: 0 0 .5rem; }
     </style>
     <script type="module" src="/src/main.jsx"></script>
   </body>
