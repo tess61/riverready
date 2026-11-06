@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
           display: 'standalone',
           start_url: base,
           scope: base,
-          theme_color: '#eef3f8', // page background (--bg, light); the <meta> tag follows the active theme
+          theme_color: '#dde8f0', // page background (--bg, light); the <meta> tag follows the active theme
           background_color: '#0a1020', // splash: ink navy, matches the icon background (--bg, dark)
           icons: [
             { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },

@@ -2,7 +2,7 @@
 """Generate the page backdrop ("river currents") as inline SVG data URIs for src/styles/tokens.css.
 
 Two layers in one SVG, drawn on a 1600x1000 canvas:
-  1. Wide, heavily blurred colour ribbons (aqua, electric blue, violet, mint): glowing currents.
+  1. Wide, heavily blurred colour ribbons in two colours only (aqua and blue) that blend into each other.
   2. Fine flow lines on top (crisp, low opacity): a topographic current map.
 The liquid glass on cards and buttons bends both layers at its rim, which is what makes the glass visible.
 Original artwork, generated from simple curves. Run:  python3 scripts/make-flow.py  and paste the two lines
@@ -23,14 +23,14 @@ def curve(i):
 
 
 # (line index, colour key, stroke width) for the blurred ribbons
-RIBBONS = [(4, "aqua", 200), (8, "blue", 170), (12, "violet", 190), (16, "mint", 150), (20, "aqua", 170), (23, "blue", 150)]
+RIBBONS = [(4, "aqua", 200), (9, "blue", 190), (14, "aqua", 180), (19, "blue", 190), (23, "aqua", 160)]
 
-# "Deep Current" theme: glowing currents on ink navy (dark); the same river in morning mist (light).
+# "Deep Current" theme, two colours: aqua and blue currents on ink navy (dark) / morning mist (light).
 THEMES = {
     "light": dict(alpha=0.28, line="#2a3a66", line_alpha=0.14,
-                  aqua="#5fd6cc", blue="#7fa2ff", violet="#a68cff", mint="#7fe3bd"),
+                  aqua="#5fd6cc", blue="#7fa2ff"),
     "dark": dict(alpha=0.4, line="#cfe0ff", line_alpha=0.07,
-                 aqua="#22d3c5", blue="#3b6cff", violet="#7c4dff", mint="#2fe0a0"),
+                 aqua="#22d3c5", blue="#3b6cff"),
 }
 
 

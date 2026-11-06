@@ -1,9 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { MeasureList, fmtDate } from './Reading.jsx';
-import StatusChip from './StatusChip.jsx';
+import ReadingHero from './ReadingHero.jsx';
 import { RetryButton } from './Feedback.jsx';
-import { ClockIcon, WarningIcon, WifiOffIcon } from './icons/index.jsx';
-import { getStatus, isStale, pickPrimary } from '../lib/status.js';
+import { WifiOffIcon } from './icons/index.jsx';
+import { pickPrimary } from '../lib/status.js';
 
 const TrendPanel = lazy(() => import('./TrendPanel.jsx')); // separate chunk, only fetched on this page
 
@@ -17,21 +17,20 @@ export default function ReadingPanel({ external, onRetry }) {
     empty: 'The Environment Agency has no readings for this station right now.',
   };
   const primary = status === 'ok' ? pickPrimary(external.data?.measures) : null;
+  // The hero shows the main measure; any others are listed under it (all of them if none has a reading).
+  const others = status === 'ok' ? (external.data?.measures || []).filter((x) => x !== primary) : [];
   return (
     <section className="panel panel-live" aria-labelledby="live-h">
       <h2 id="live-h">Live readings</h2>
       {status === 'ok' ? (
         <>
-          {primary && (
-            <div className="status-line">
-              <StatusChip status={getStatus(primary)} large />
-              <p className="meta">
-                <ClockIcon size={16} />{primary.name}, updated {fmtDate(primary.latest.dateTime)}
-              </p>
-              {isStale(primary.latest.dateTime) && <p className="meta stale"><WarningIcon size={16} />Reading may be out of date</p>}
-            </div>
+          {primary && <ReadingHero measure={primary} />}
+          {(!primary || others.length > 0) && (
+            <>
+              {primary && <p className="hero-label">Other measurements</p>}
+              <MeasureList measures={others} />
+            </>
           )}
-          <MeasureList measures={external.data?.measures} />
           {primary?.id && (
             <Suspense fallback={<p className="muted small">Loading trend…</p>}>
               <TrendPanel measure={primary} />

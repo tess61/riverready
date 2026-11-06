@@ -4,7 +4,7 @@ The design system behind the Phase 5b redesign and its polish pass. Colours and 
 
 ## Concept card ("Deep Current", Nov 2026; replaces the earthy Phase 5b palette at the student's request)
 - **Idea:** your places, the river next to each one, and how ready you are.
-- **Metaphor:** a river at night: ink-navy depths with glowing currents of aqua, electric blue and violet. Light mode is the same river in morning mist.
+- **Metaphor:** a river at night: ink-navy depths with glowing currents in two colours only, aqua and deep blue, blending into each other. Light mode is the same river in morning mist.
 - **Signature:** liquid glass over river currents. A fixed backdrop of blurred glowing currents with fine flow lines (`--flow`, drawn by `scripts/make-flow.py`); every button, header pill, card and panel is its own liquid-glass pane that bends the currents at its rim (`hooks/useLiquidGlass.js`). The logo is a glass water drop carrying two waves, the same drop as the app icon (`scripts/make-icons.py`). The gauge tube on each card shows where the latest reading sits in its typical range.
 - **Emotion:** calm and clear. Information first, never alarming.
 - **Motion verb:** *rise like water.* Things fill from the bottom, lift slightly, or settle; the empty-state pin floats.
@@ -13,11 +13,12 @@ The design system behind the Phase 5b redesign and its polish pass. Colours and 
 ## Palette (by role; exact values per theme in tokens.css)
 | Role | Light | Dark |
 |---|---|---|
-| Ground | mist `#eef3f8` | ink navy `#0a1020` |
+| Ground | mist `#dde8f0` | ink navy `#0a1020` |
 | Ink | `#0d1830` | `#eaf1ff` |
 | Primary | deep aqua `#0a636c` | glowing aqua `#5ee6d6` |
-| Currents (backdrop) | aqua, blue, violet, mint at 28% | brighter versions at 40% |
-| Accents | blue, violet, mint; coral = high, amber = medium/low | lighter versions of the same |
+| Currents (backdrop) | aqua + blue at 28% | brighter aqua + blue at 40% |
+| Blends | aqua -> blue only (logo, icon, progress bar, disclaimer cap, illustration) | same |
+| Status only (solid, never blended) | coral = high, amber = medium/low | lighter versions |
 | Focus | violet `#5a2fd0` | `#c3b0ff` |
 Coral is kept for "high" and destructive actions, so the focus ring is violet. Contrast was checked against the rendered backdrop (pixels behind each text run), not just token pairs, because text sits on gradients.
 

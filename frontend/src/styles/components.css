@@ -7,7 +7,7 @@
   padding: 0 1.1rem;
   font: inherit; font-weight: 650;
   color: var(--primary);
-  background: var(--glass-surface); /* translucent: liquid glass behind it (glass.css) */
+  background: var(--surface); /* solid: glass is reserved for the header and footer */
   border: 2px solid var(--primary);
   border-radius: var(--r-pill);
   text-decoration: none;
@@ -23,9 +23,9 @@
 .btn:focus-visible { background-size: 100% 100%; }
 .btn:active:not(:disabled) { transform: translateY(1px) scale(.98); }
 /* Primary buttons sit on a darker "ledge" that disappears when pressed. */
-.btn-primary { background-color: var(--glass-primary); background-image: none; color: var(--primary-text); border-color: var(--primary); box-shadow: 0 3px 0 var(--primary-deep), var(--glass-inset-dark); }
+.btn-primary { background-color: var(--primary); background-image: none; color: var(--primary-text); border-color: var(--primary); box-shadow: 0 3px 0 var(--primary-deep), var(--glass-inset-dark); }
 @media (hover: hover) {
-  .btn-primary:hover:not(:disabled) { background-color: var(--glass-primary-hover); border-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 5px 0 var(--primary-deep), var(--glass-inset-dark); }
+  .btn-primary:hover:not(:disabled) { background-color: var(--primary-hover); border-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 5px 0 var(--primary-deep), var(--glass-inset-dark); }
 }
 .btn-primary:focus-visible { transform: translateY(-2px); box-shadow: 0 5px 0 var(--primary-deep), var(--glass-inset-dark); }
 .btn-primary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--primary-deep); }
@@ -36,7 +36,7 @@
 .btn:disabled { opacity: .6; cursor: not-allowed; }
 .btn-primary:disabled { box-shadow: none; }
 .linklike { background: none; border: 0; padding: .5rem 0; font: inherit; font-weight: 650; color: var(--primary); text-decoration: underline; cursor: pointer; min-height: var(--tap); }
-.back-link { display: inline-flex; align-items: center; gap: .4rem; min-height: var(--tap); padding: 0 1rem 0 .8rem; font-weight: 650; text-decoration: none; border-radius: var(--r-pill); border: 1px solid var(--border); background: var(--glass-chrome); box-shadow: var(--glass-inset); } /* small glass pill */
+.back-link { display: inline-flex; align-items: center; gap: .4rem; min-height: var(--tap); padding: 0 1rem 0 .8rem; font-weight: 650; text-decoration: none; border-radius: var(--r-pill); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--glass-inset); }
 .back-link .icon { transition: translate var(--t-med) var(--ease); }
 @media (hover: hover) { .back-link:hover { text-decoration: underline; } .back-link:hover .icon { translate: -4px 0; } }
 .back-link:focus-visible .icon { translate: -4px 0; }
@@ -44,20 +44,21 @@
 /* ---- Page heads ---- */
 .page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5); }
 .page-head h1 { margin: 0; }
+.page-head > div { min-width: 0; max-width: 100%; } /* lets a long location name wrap instead of pushing past the screen */
 .page-head-hero h1 { font-size: clamp(2.4rem, 10vw, 4.25rem); letter-spacing: -.04em; }
 .lede { margin: var(--sp-2) 0 0; max-width: 36rem; color: var(--muted); font-size: 1.0625rem; }
 .lede .icon { vertical-align: -3px; margin-right: .35rem; color: var(--primary); }
 .actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
 .page-head .actions { margin-top: 0; }
 
-/* ---- Location cards with a gauge tube ---- */
+/* ---- Location cards with a small status dial (dial styles in visuals.css) ---- */
 .cards, .results, .skel-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-4); }
 .cards > li { display: flex; }
 @media (min-width: 40rem) { .cards, .skel-grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 64rem) { .cards, .skel-grid { grid-template-columns: repeat(3, 1fr); } }
 .card {
   display: block; width: 100%;
-  background: var(--glass-surface);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   color: inherit; text-decoration: none;
@@ -65,12 +66,13 @@
 }
 @media (hover: hover) {
   .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-2), var(--glass-inset); border-color: var(--border-strong); }
-  .loc-card:hover .gauge-fill { scale: 1 1.12; }
+  .loc-card:hover .dial-needle { scale: 1.06; }
 }
 .card:focus-visible { border-color: var(--border-strong); }
-.loc-card { display: grid; grid-template-columns: auto 1fr; gap: var(--sp-4); padding: var(--sp-4) var(--sp-4) var(--sp-4) .9rem; transition: transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease), background-color var(--t-med), border-color var(--t-med); }
+.loc-card { padding: var(--sp-4); transition: transform var(--t-med) var(--ease), box-shadow var(--t-med) var(--ease), background-color var(--t-med), border-color var(--t-med); }
 .loc-card h2 { font-size: var(--fs-lg); margin: 0 0 var(--sp-1); color: var(--text); overflow-wrap: anywhere; }
 .loc-card:focus-visible h2, .loc-card:hover h2 { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+.loc-card .dial { float: right; margin: 0 0 var(--sp-2) var(--sp-3); } /* text flows around it; the meta line below gets the full width */
 .loc-body { min-width: 0; min-height: 10.5rem; } /* reserved so the card doesn't grow when the reading arrives (CLS) */
 .loc-station { display: flex; align-items: center; gap: .35rem; margin: 0 0 var(--sp-3); color: var(--muted); font-size: var(--fs-sm); }
 /* Number on its own line, chip below: the chip never slides sideways when the number appears. */
@@ -81,19 +83,10 @@
 .loc-value .num { font-size: var(--fs-xl); }
 .num { font-family: var(--font-num); font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.02em; line-height: 1; }
 .unit { font-weight: 650; color: var(--muted); }
-.meta { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin: var(--sp-1) 0 0; color: var(--muted); font-size: var(--fs-sm); }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin: var(--sp-1) 0 0; color: var(--muted); font-size: var(--fs-sm); overflow-wrap: anywhere; }
+.meta > * { min-width: 0; }
 .stale { display: inline-flex; align-items: center; gap: .25rem; color: var(--danger); }
 
-/* Tube: ticks at 25% and 75% mark the typical low and high. Fill rises once on load. */
-.gauge { position: relative; width: 14px; min-height: 7.5rem; border: 1.5px solid var(--border-strong); border-radius: var(--r-pill); background: var(--surface-2); overflow: hidden; }
-.gauge::before, .gauge::after { content: ""; position: absolute; left: 0; right: 0; z-index: 1; border-top: 1.5px solid var(--border-strong); }
-.gauge::before { bottom: 25%; }
-.gauge::after { bottom: 75%; }
-.gauge.is-empty { border-style: dashed; }
-.gauge-fill { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, var(--water), var(--water-soft)); transform-origin: bottom; animation: rise var(--t-slow) var(--ease) both; transition: scale var(--t-med) var(--ease); }
-.is-high .gauge-fill { background: linear-gradient(to top, var(--coral), var(--water)); }
-.is-low .gauge-fill { background: var(--amber); }
-@keyframes rise { from { transform: scaleY(0); } }
 
 /* ---- Status chips: icon + text + colour + border style ---- */
 .chip { display: inline-flex; align-items: center; gap: .35rem; padding: .25rem .75rem .25rem .55rem; border: 2px solid currentColor; border-radius: var(--r-pill); font-weight: 750; font-size: var(--fs-sm); line-height: 1.2; white-space: nowrap; }
@@ -119,7 +112,7 @@
 .search-box .icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
 .field .search-box input { min-height: 3.5rem; padding-left: 3rem; font-size: 1.125rem; border-width: 2px; border-radius: var(--r-pill); }
 .results { gap: var(--sp-2); }
-.result { display: flex; align-items: center; gap: .85rem; width: 100%; min-height: 3.5rem; padding: .75rem 1rem; font: inherit; color: inherit; text-align: left; background: var(--glass-surface); box-shadow: var(--glass-inset); border: 1.5px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: border-color var(--t-fast), box-shadow var(--t-fast); }
+.result { display: flex; align-items: center; gap: .85rem; width: 100%; min-height: 3.5rem; padding: .75rem 1rem; font: inherit; color: inherit; text-align: left; background: var(--surface); box-shadow: var(--glass-inset); border: 1.5px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: border-color var(--t-fast), box-shadow var(--t-fast); }
 .result:hover { border-color: var(--primary); }
 .result[aria-pressed="true"] { border: 2px solid var(--primary); box-shadow: inset 6px 0 0 var(--primary), var(--glass-inset); }
 .result-icon { color: var(--primary); }
@@ -157,7 +150,7 @@
 .fb-error .fb-icon { color: var(--danger); }
 .fb-warn { background: var(--warn-bg); border: 1.5px solid var(--warn); }
 .fb-warn .fb-icon { color: var(--warn); }
-.fb-empty { flex-direction: column; align-items: center; text-align: center; padding: var(--sp-6) var(--sp-4); background: var(--glass-surface); border: 2px dashed var(--border-strong); border-radius: var(--r-lg); }
+.fb-empty { flex-direction: column; align-items: center; text-align: center; padding: var(--sp-6) var(--sp-4); background: var(--surface); border: 2px dashed var(--border-strong); border-radius: var(--r-lg); }
 .fb-empty strong { font: 750 var(--fs-md)/1.2 var(--font-display); }
 .fb-empty p { margin-bottom: 0; color: var(--muted); max-width: 30rem; }
 .empty-scene { width: min(15rem, 80%); height: auto; }
@@ -172,11 +165,11 @@
 /* Empty-state illustration */
 .es-current { fill: none; stroke-linecap: round; stroke-width: 1.5; }
 .es-c1 { stroke: var(--blue); opacity: .45; }
-.es-c2 { stroke: var(--violet); opacity: .4; }
+.es-c2 { stroke: var(--water); opacity: .4; }
 .es-ripple { fill: none; stroke: var(--water); stroke-width: 2; }
 .es-r1 { opacity: .9; } .es-r2 { opacity: .5; } .es-r3 { opacity: .25; }
 .es-stop-a { stop-color: var(--water); }
-.es-stop-b { stop-color: var(--violet); }
+.es-stop-b { stop-color: var(--blue); }
 .es-pin-shine { fill: none; stroke: #fff; stroke-opacity: .7; stroke-width: 3; stroke-linecap: round; }
 .es-pin-dot { fill: var(--surface); }
 /* The pin floats gently above the water (stopped by the global reduced-motion rule). */

@@ -1,6 +1,6 @@
 /* Screen-level styles: panels, location detail (readings, trend, saved details), actions checklist. */
 
-.panel { background: var(--glass-surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; margin: 0 0 1.25rem; box-shadow: var(--shadow-1), var(--glass-inset); }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; margin: 0 0 1.25rem; box-shadow: var(--shadow-1), var(--glass-inset); }
 @media (min-width: 40rem) { .panel { padding: 1.5rem 1.75rem; } }
 .panel-title { display: flex; align-items: center; gap: .5rem; }
 .panel-title .icon { color: var(--primary); }
@@ -22,10 +22,8 @@
 }
 
 /* ---- Live readings: water-tinted panel with big numerals ---- */
-.panel-live { background: var(--glass-surface); background: linear-gradient(180deg, color-mix(in srgb, var(--water-soft) 55%, var(--glass-surface)) 0, var(--glass-surface) 10rem); }
-.status-line { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-4); margin: 0 0 var(--sp-5); }
-.status-line .meta { margin: 0; }
-.measures { list-style: none; margin: 0 0 var(--sp-4); padding: 0; display: grid; gap: var(--sp-4); }
+.panel-live { background: var(--surface); background: linear-gradient(180deg, color-mix(in srgb, var(--water-soft) 55%, var(--surface)) 0, var(--surface) 10rem); }
+.measures { list-style: none; margin: 0 0 var(--sp-4); padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
 .measure { padding-left: var(--sp-4); border-left: 4px solid var(--water); }
 .measure h3 { font-size: var(--fs-sm); color: var(--muted); }
 .value { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem; margin: var(--sp-1) 0 var(--sp-2); }
@@ -59,7 +57,7 @@
 .progress-num { font: 800 var(--fs-xl)/1 var(--font-num); }
 .progress-pct { font-weight: 750; color: var(--muted); font-variant-numeric: tabular-nums; }
 .progress-track { height: .9rem; overflow: hidden; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: var(--r-pill); }
-.progress-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--water), var(--violet)); transition: width var(--t-slow) var(--ease); }
+.progress-fill { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--water), var(--blue)); transition: width var(--t-slow) var(--ease); }
 
 .filters { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-2) 0 var(--sp-3); }
 .filter { min-height: var(--tap); padding: 0 1rem; font: inherit; font-weight: 600; color: var(--text); background: transparent; border: 1.5px solid var(--border-strong); border-radius: var(--r-pill); cursor: pointer; }
@@ -77,16 +75,16 @@
 .filter:active { transform: scale(.97); }
 .filter[aria-pressed="true"] { background-color: var(--text); background-image: none; border-color: var(--text); color: var(--surface); font-weight: 750; }
 
-.action-list { list-style: none; margin: var(--sp-2) 0 var(--sp-4); padding: 0; display: grid; gap: .6rem; }
+.action-list { list-style: none; margin: var(--sp-2) 0 var(--sp-4); padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: .6rem; }
 /* Left bar shows priority (also written in the "… priority" tag, so colour is not the only signal). */
-.action { position: relative; padding: .4rem .9rem .5rem 1.1rem; background: var(--glass-surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--glass-inset); }
+.action { position: relative; padding: .4rem .9rem .5rem 1.1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--glass-inset); }
 .action::before { content: ""; position: absolute; left: 0; top: .7rem; bottom: .7rem; width: 4px; border-radius: 0 4px 4px 0; background: var(--border-strong); }
 .action.prio-high::before { background: var(--coral); }
 .action.prio-medium::before { background: var(--amber); }
-.action.is-done { background: var(--glass-surface-2); }
+.action.is-done { background: var(--surface-2); }
 .is-done .action-title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 2px; }
 .action-check { display: flex; align-items: flex-start; gap: .75rem; min-height: var(--tap); padding: .5rem 0; font-weight: 650; cursor: pointer; }
-.action-title { padding-top: .1rem; overflow-wrap: anywhere; }
+.action-title { min-width: 0; padding-top: .1rem; overflow-wrap: anywhere; }
 /* Custom checkbox: still a real <input>, so keyboard and screen readers work as normal. */
 .action-check input {
   appearance: none; -webkit-appearance: none;

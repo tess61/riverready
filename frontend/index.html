@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#eef3f8" />
+    <meta name="theme-color" content="#dde8f0" />
     <script>
       // Set the theme before first paint: saved choice, else the system preference.
       // Colours match --bg in src/styles/tokens.css (the page colour under the status bar).
@@ -12,7 +12,7 @@
         try { t = localStorage.getItem('rr-theme'); } catch (e) {}
         if (t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         document.documentElement.setAttribute('data-theme', t);
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', t === 'dark' ? '#0a1020' : '#eef3f8');
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', t === 'dark' ? '#0a1020' : '#dde8f0');
       })();
     </script>
     <link rel="icon" type="image/png" sizes="192x192" href="%BASE_URL%icons/icon-192.png" />

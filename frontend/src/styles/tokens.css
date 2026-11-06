@@ -31,12 +31,11 @@
   --t-med: 240ms;
   --t-slow: 700ms;
 
-  /* Liquid glass tints: translucent versions of the surfaces, so the refraction added by
-     lib/liquid-glass.js shows through. Opaque enough for AA text contrast over any page content.
+  /* Liquid glass tints: mostly clear, so the background shows through and visibly bends at each rim
+     (refraction from lib/liquid-glass.js). Just enough tint for AA text contrast; verified on the rendered page.
      glass.css swaps them back to solid colours when glass is unsupported or unwanted. */
-  --glass-surface: color-mix(in srgb, var(--surface) 62%, transparent);
-  --glass-chrome: color-mix(in srgb, var(--surface) 72%, transparent); /* header pills: float over content, a bit denser */
-  --glass-surface-2: color-mix(in srgb, var(--surface-2) 82%, transparent);
+  --glass-chrome: color-mix(in srgb, var(--surface) 22%, transparent); /* header pills float over text, so a little denser */
+  --glass-surface-2: color-mix(in srgb, var(--surface-2) 28%, transparent);
   --glass-primary: color-mix(in srgb, var(--primary) 94%, transparent);
   --glass-primary-hover: color-mix(in srgb, var(--primary-hover) 94%, transparent);
   /* Specular top highlight + 1px rim, added to each glass element's box-shadow. */
@@ -44,19 +43,19 @@
   --glass-inset-dark: inset 0 1px 1px rgb(255 255 255 / .3);
 }
 
-/* Theme: "Deep Current", a river at night. Ink-navy depths, glowing aqua water, electric blue and violet
-   currents; light mode is the same river in morning mist. Status colours keep text + icon (never colour alone). */
+/* Theme: "Deep Current", a river at night. Two colours only, aqua and deep blue, blending on ink navy;
+   light mode is the same river in morning mist. Coral/amber appear only as solid status/priority colours. Status colours keep text + icon (never colour alone). */
 :root, :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #eef3f8;            /* morning mist */
+  --bg: #dde8f0;            /* morning mist */
   /* River-currents backdrop (scripts/make-flow.py): blurred light ribbons + fine flow lines. Fixed behind the page. */
-  --flow: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 1600 1000%27 preserveAspectRatio=%27xMidYMid slice%27%3E%3Cfilter id=%27b%27 x=%27-20%25%27 y=%27-20%25%27 width=%27140%25%27 height=%27140%25%27%3E%3CfeGaussianBlur stdDeviation=%2755%27/%3E%3C/filter%3E%3Cg fill=%27none%27 stroke-linecap=%27round%27 opacity=%270.28%27 filter=%27url%28%23b%29%27%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27 stroke=%27%235fd6cc%27 stroke-width=%27200%27/%3E%3Cpath d=%27M-60 296C420 171 980 451 1660 246%27 stroke=%27%237fa2ff%27 stroke-width=%27170%27/%3E%3Cpath d=%27M-60 504C420 320 980 718 1660 454%27 stroke=%27%23a68cff%27 stroke-width=%27190%27/%3E%3Cpath d=%27M-60 712C420 601 980 853 1660 662%27 stroke=%27%237fe3bd%27 stroke-width=%27150%27/%3E%3Cpath d=%27M-60 920C420 730 980 1140 1660 870%27 stroke=%27%235fd6cc%27 stroke-width=%27170%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27 stroke=%27%237fa2ff%27 stroke-width=%27150%27/%3E%3C/g%3E%3Cg fill=%27none%27 stroke=%27%232a3a66%27 stroke-opacity=%270.14%27 stroke-width=%271.3%27%3E%3Cpath d=%27M-60 -120C420 -270 980 60 1660 -170%27/%3E%3Cpath d=%27M-60 -68C420 -244 980 138 1660 -118%27/%3E%3Cpath d=%27M-60 -16C420 -205 980 203 1660 -66%27/%3E%3Cpath d=%27M-60 36C420 -149 980 251 1660 -14%27/%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27/%3E%3Cpath d=%27M-60 140C420 4 980 306 1660 90%27/%3E%3Cpath d=%27M-60 192C420 77 980 337 1660 142%27/%3E%3Cpath d=%27M-60 244C420 133 980 385 1660 194%27/%3E%3Cpath d=%27M-60 296C420 171 980 451 1660 246%27/%3E%3Cpath d=%27M-60 348C420 197 980 529 1660 298%27/%3E%3Cpath d=%27M-60 400C420 224 980 606 1660 350%27/%3E%3Cpath d=%27M-60 452C420 262 980 672 1660 402%27/%3E%3Cpath d=%27M-60 504C420 320 980 718 1660 454%27/%3E%3Cpath d=%27M-60 556C420 393 980 749 1660 506%27/%3E%3Cpath d=%27M-60 608C420 473 980 773 1660 558%27/%3E%3Cpath d=%27M-60 660C420 545 980 805 1660 610%27/%3E%3Cpath d=%27M-60 712C420 601 980 853 1660 662%27/%3E%3Cpath d=%27M-60 764C420 639 980 919 1660 714%27/%3E%3Cpath d=%27M-60 816C420 665 980 997 1660 766%27/%3E%3Cpath d=%27M-60 868C420 691 980 1075 1660 818%27/%3E%3Cpath d=%27M-60 920C420 730 980 1140 1660 870%27/%3E%3Cpath d=%27M-60 972C420 788 980 1186 1660 922%27/%3E%3Cpath d=%27M-60 1024C420 862 980 1216 1660 974%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27/%3E%3C/g%3E%3C/svg%3E");
-  --surface: #ffffff;
-  --surface-2: #e4ecf5;
+  --flow: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 1600 1000%27 preserveAspectRatio=%27xMidYMid slice%27%3E%3Cfilter id=%27b%27 x=%27-20%25%27 y=%27-20%25%27 width=%27140%25%27 height=%27140%25%27%3E%3CfeGaussianBlur stdDeviation=%2755%27/%3E%3C/filter%3E%3Cg fill=%27none%27 stroke-linecap=%27round%27 opacity=%270.28%27 filter=%27url%28%23b%29%27%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27 stroke=%27%235fd6cc%27 stroke-width=%27200%27/%3E%3Cpath d=%27M-60 348C420 197 980 529 1660 298%27 stroke=%27%237fa2ff%27 stroke-width=%27190%27/%3E%3Cpath d=%27M-60 608C420 473 980 773 1660 558%27 stroke=%27%235fd6cc%27 stroke-width=%27180%27/%3E%3Cpath d=%27M-60 868C420 691 980 1075 1660 818%27 stroke=%27%237fa2ff%27 stroke-width=%27190%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27 stroke=%27%235fd6cc%27 stroke-width=%27160%27/%3E%3C/g%3E%3Cg fill=%27none%27 stroke=%27%232a3a66%27 stroke-opacity=%270.14%27 stroke-width=%271.3%27%3E%3Cpath d=%27M-60 -120C420 -270 980 60 1660 -170%27/%3E%3Cpath d=%27M-60 -68C420 -244 980 138 1660 -118%27/%3E%3Cpath d=%27M-60 -16C420 -205 980 203 1660 -66%27/%3E%3Cpath d=%27M-60 36C420 -149 980 251 1660 -14%27/%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27/%3E%3Cpath d=%27M-60 140C420 4 980 306 1660 90%27/%3E%3Cpath d=%27M-60 192C420 77 980 337 1660 142%27/%3E%3Cpath d=%27M-60 244C420 133 980 385 1660 194%27/%3E%3Cpath d=%27M-60 296C420 171 980 451 1660 246%27/%3E%3Cpath d=%27M-60 348C420 197 980 529 1660 298%27/%3E%3Cpath d=%27M-60 400C420 224 980 606 1660 350%27/%3E%3Cpath d=%27M-60 452C420 262 980 672 1660 402%27/%3E%3Cpath d=%27M-60 504C420 320 980 718 1660 454%27/%3E%3Cpath d=%27M-60 556C420 393 980 749 1660 506%27/%3E%3Cpath d=%27M-60 608C420 473 980 773 1660 558%27/%3E%3Cpath d=%27M-60 660C420 545 980 805 1660 610%27/%3E%3Cpath d=%27M-60 712C420 601 980 853 1660 662%27/%3E%3Cpath d=%27M-60 764C420 639 980 919 1660 714%27/%3E%3Cpath d=%27M-60 816C420 665 980 997 1660 766%27/%3E%3Cpath d=%27M-60 868C420 691 980 1075 1660 818%27/%3E%3Cpath d=%27M-60 920C420 730 980 1140 1660 870%27/%3E%3Cpath d=%27M-60 972C420 788 980 1186 1660 922%27/%3E%3Cpath d=%27M-60 1024C420 862 980 1216 1660 974%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27/%3E%3C/g%3E%3C/svg%3E");
+  --surface: #e8f2f4;       /* pale aqua mist, not plain white */
+  --surface-2: #d8e6ec;
   --text: #0d1830;          /* deep-water ink */
   --muted: #46557a;
-  --border: #cdd8e6;
-  --border-strong: #7b8bab;
+  --border: #bccddb;
+  --border-strong: #6c7d9f;
 
   --primary: #0a636c;       /* deep aqua */
   --primary-hover: #074c53;
@@ -64,9 +63,7 @@
   --primary-deep: #054048;  /* 'ledge' under primary buttons */
   --water: #1597a6;         /* decorative water (sparkline, gauges) */
   --water-soft: #c8eef0;
-  --blue: #2f62e0;          /* currents and accents */
-  --violet: #6a4fd8;
-  --mint: #1f9e6e;
+  --blue: #2f62e0;          /* second theme colour: blends with aqua (currents, logo, progress) */
   --coral: #d94a5a;         /* high priority, high reading */
   --amber: #c98a12;         /* medium priority, low reading */
   --focus: #5a2fd0;         /* violet ring: distinct from coral (errors/delete) */
@@ -87,7 +84,7 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #0a1020;            /* ink navy: the river at night */
-  --flow: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 1600 1000%27 preserveAspectRatio=%27xMidYMid slice%27%3E%3Cfilter id=%27b%27 x=%27-20%25%27 y=%27-20%25%27 width=%27140%25%27 height=%27140%25%27%3E%3CfeGaussianBlur stdDeviation=%2755%27/%3E%3C/filter%3E%3Cg fill=%27none%27 stroke-linecap=%27round%27 opacity=%270.4%27 filter=%27url%28%23b%29%27%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27 stroke=%27%2322d3c5%27 stroke-width=%27200%27/%3E%3Cpath d=%27M-60 296C420 171 980 451 1660 246%27 stroke=%27%233b6cff%27 stroke-width=%27170%27/%3E%3Cpath d=%27M-60 504C420 320 980 718 1660 454%27 stroke=%27%237c4dff%27 stroke-width=%27190%27/%3E%3Cpath d=%27M-60 712C420 601 980 853 1660 662%27 stroke=%27%232fe0a0%27 stroke-width=%27150%27/%3E%3Cpath d=%27M-60 920C420 730 980 1140 1660 870%27 stroke=%27%2322d3c5%27 stroke-width=%27170%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27 stroke=%27%233b6cff%27 stroke-width=%27150%27/%3E%3C/g%3E%3Cg fill=%27none%27 stroke=%27%23cfe0ff%27 stroke-opacity=%270.07%27 stroke-width=%271.3%27%3E%3Cpath d=%27M-60 -120C420 -270 980 60 1660 -170%27/%3E%3Cpath d=%27M-60 -68C420 -244 980 138 1660 -118%27/%3E%3Cpath d=%27M-60 -16C420 -205 980 203 1660 -66%27/%3E%3Cpath d=%27M-60 36C420 -149 980 251 1660 -14%27/%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27/%3E%3Cpath d=%27M-60 140C420 4 980 306 1660 90%27/%3E%3Cpath d=%27M-60 192C420 77 980 337 1660 142%27/%3E%3Cpath d=%27M-60 244C420 133 980 385 1660 194%27/%3E%3Cpath d=%27M-60 296C420 171 980 451 1660 246%27/%3E%3Cpath d=%27M-60 348C420 197 980 529 1660 298%27/%3E%3Cpath d=%27M-60 400C420 224 980 606 1660 350%27/%3E%3Cpath d=%27M-60 452C420 262 980 672 1660 402%27/%3E%3Cpath d=%27M-60 504C420 320 980 718 1660 454%27/%3E%3Cpath d=%27M-60 556C420 393 980 749 1660 506%27/%3E%3Cpath d=%27M-60 608C420 473 980 773 1660 558%27/%3E%3Cpath d=%27M-60 660C420 545 980 805 1660 610%27/%3E%3Cpath d=%27M-60 712C420 601 980 853 1660 662%27/%3E%3Cpath d=%27M-60 764C420 639 980 919 1660 714%27/%3E%3Cpath d=%27M-60 816C420 665 980 997 1660 766%27/%3E%3Cpath d=%27M-60 868C420 691 980 1075 1660 818%27/%3E%3Cpath d=%27M-60 920C420 730 980 1140 1660 870%27/%3E%3Cpath d=%27M-60 972C420 788 980 1186 1660 922%27/%3E%3Cpath d=%27M-60 1024C420 862 980 1216 1660 974%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27/%3E%3C/g%3E%3C/svg%3E");
+  --flow: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 1600 1000%27 preserveAspectRatio=%27xMidYMid slice%27%3E%3Cfilter id=%27b%27 x=%27-20%25%27 y=%27-20%25%27 width=%27140%25%27 height=%27140%25%27%3E%3CfeGaussianBlur stdDeviation=%2755%27/%3E%3C/filter%3E%3Cg fill=%27none%27 stroke-linecap=%27round%27 opacity=%270.4%27 filter=%27url%28%23b%29%27%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27 stroke=%27%2322d3c5%27 stroke-width=%27200%27/%3E%3Cpath d=%27M-60 348C420 197 980 529 1660 298%27 stroke=%27%233b6cff%27 stroke-width=%27190%27/%3E%3Cpath d=%27M-60 608C420 473 980 773 1660 558%27 stroke=%27%2322d3c5%27 stroke-width=%27180%27/%3E%3Cpath d=%27M-60 868C420 691 980 1075 1660 818%27 stroke=%27%233b6cff%27 stroke-width=%27190%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27 stroke=%27%2322d3c5%27 stroke-width=%27160%27/%3E%3C/g%3E%3Cg fill=%27none%27 stroke=%27%23cfe0ff%27 stroke-opacity=%270.07%27 stroke-width=%271.3%27%3E%3Cpath d=%27M-60 -120C420 -270 980 60 1660 -170%27/%3E%3Cpath d=%27M-60 -68C420 -244 980 138 1660 -118%27/%3E%3Cpath d=%27M-60 -16C420 -205 980 203 1660 -66%27/%3E%3Cpath d=%27M-60 36C420 -149 980 251 1660 -14%27/%3E%3Cpath d=%27M-60 88C420 -75 980 281 1660 38%27/%3E%3Cpath d=%27M-60 140C420 4 980 306 1660 90%27/%3E%3Cpath d=%27M-60 192C420 77 980 337 1660 142%27/%3E%3Cpath d=%27M-60 244C420 133 980 385 1660 194%27/%3E%3Cpath d=%27M-60 296C420 171 980 451 1660 246%27/%3E%3Cpath d=%27M-60 348C420 197 980 529 1660 298%27/%3E%3Cpath d=%27M-60 400C420 224 980 606 1660 350%27/%3E%3Cpath d=%27M-60 452C420 262 980 672 1660 402%27/%3E%3Cpath d=%27M-60 504C420 320 980 718 1660 454%27/%3E%3Cpath d=%27M-60 556C420 393 980 749 1660 506%27/%3E%3Cpath d=%27M-60 608C420 473 980 773 1660 558%27/%3E%3Cpath d=%27M-60 660C420 545 980 805 1660 610%27/%3E%3Cpath d=%27M-60 712C420 601 980 853 1660 662%27/%3E%3Cpath d=%27M-60 764C420 639 980 919 1660 714%27/%3E%3Cpath d=%27M-60 816C420 665 980 997 1660 766%27/%3E%3Cpath d=%27M-60 868C420 691 980 1075 1660 818%27/%3E%3Cpath d=%27M-60 920C420 730 980 1140 1660 870%27/%3E%3Cpath d=%27M-60 972C420 788 980 1186 1660 922%27/%3E%3Cpath d=%27M-60 1024C420 862 980 1216 1660 974%27/%3E%3Cpath d=%27M-60 1076C420 941 980 1241 1660 1026%27/%3E%3C/g%3E%3C/svg%3E");
   --surface: #141c30;
   --surface-2: #1b2540;
   --text: #eaf1ff;
@@ -102,8 +99,6 @@
   --water: #4fd8e0;
   --water-soft: #12384a;
   --blue: #6f9bff;
-  --violet: #a58bff;
-  --mint: #7ef0b8;
   --coral: #ff8a8a;
   --amber: #ffc66b;
   --focus: #c3b0ff;

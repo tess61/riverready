@@ -9,6 +9,7 @@ body {
   color: var(--text);
   font: var(--fs-base)/1.55 var(--font);
   -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word; /* long names, URLs or EA labels wrap instead of widening the page on phones */
 }
 /* River-currents backdrop (tokens --flow, drawn by scripts/make-flow.py). Fixed, so content and its glass
    slide over it while scrolling and the refraction at each glass rim visibly shifts. Rasterised once, no JS. */
@@ -21,6 +22,8 @@ h1 {
 }
 h2 { font: 750 var(--fs-md)/1.2 var(--font-display); letter-spacing: -.015em; margin: 0 0 var(--sp-3); }
 h3 { font-size: var(--fs-base); font-weight: 700; margin: 0; }
+/* Headings and stored values often sit in flex/grid rows, where only 'anywhere' lets them shrink and wrap. */
+h1, h2, h3, dd, label { overflow-wrap: anywhere; }
 p { margin: 0 0 var(--sp-2); }
 a { color: var(--primary); text-underline-offset: 3px; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
@@ -38,7 +41,7 @@ body, .card, .panel, .action, .disclaimer, .btn, .field input, .field textarea, 
   transition: background-color var(--t-med) var(--ease), color var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
 }
 
-.shell { min-height: 100vh; display: flex; flex-direction: column; }
+.shell { min-height: 100vh; display: flex; flex-direction: column; overflow-x: clip; } /* safety net: no sideways scroll on phones (clip keeps the sticky header working, unlike hidden) */
 .skip { position: absolute; left: -999px; top: 0; z-index: 20; background: var(--surface); color: var(--primary); padding: .75rem 1rem; font-weight: 700; }
 .skip:focus { left: var(--sp-2); top: var(--sp-2); }
 
@@ -78,7 +81,7 @@ body, .card, .panel, .action, .disclaimer, .btn, .field input, .field textarea, 
   content: ""; position: absolute; inset: .35rem .35rem .15rem;
   border-radius: 0 50% 50% 50%;
   rotate: 45deg;
-  background: linear-gradient(135deg, var(--water), var(--violet));
+  background: linear-gradient(135deg, var(--water), var(--blue)); /* the two theme colours, as in the app icon */
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / .45);
   transition: border-radius var(--t-med) var(--ease);
 }
@@ -158,9 +161,9 @@ body, .card, .panel, .action, .disclaimer, .btn, .field input, .field textarea, 
   font-size: var(--fs-xs);
   line-height: 1.4;
 }
-.disclaimer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--water), var(--blue), var(--violet)); }
+.disclaimer::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--water), var(--blue)); }
 .disclaimer .icon { color: var(--primary); margin-top: 1px; }
-.disclaimer p { margin: 0; max-width: 60rem; }
+.disclaimer p { margin: 0; max-width: 60rem; min-width: 0; }
 @media (min-width: 40rem) { .page { padding-top: var(--sp-6); padding-bottom: 5.5rem; } }
 
 /* Respect reduced motion everywhere: animations stop, transitions become instant. */

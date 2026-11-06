@@ -1,0 +1,82 @@
+/* Reading visuals: status dial, river scene, level tube and the hero block on the detail page.
+   Status colours (amber low, green normal, coral high) are always solid and always sit next to the text chip. */
+
+/* ---- Status dial (half-circle meter) ---- */
+.dial { display: block; width: 5.75rem; height: auto; overflow: visible; }
+.dial-lg { width: 7.5rem; }
+.dial-seg { fill: none; stroke-width: 11; opacity: .32; transition: opacity var(--t-med) var(--ease); }
+.dial-seg.is-on { opacity: 1; }
+.seg-low { stroke: var(--amber); }
+.seg-normal { stroke: var(--ok); }
+.seg-high { stroke: var(--coral); }
+.dial.is-empty .dial-seg { stroke: var(--border-strong); stroke-dasharray: 4 4; opacity: 1; }
+.dial-needle { fill: var(--text); transform-origin: 60px 60px; transform: rotate(var(--a)); animation: needle-in 900ms var(--ease) both; transition: scale var(--t-med) var(--ease); }
+.dial-needle circle { fill: var(--surface); stroke: var(--text); stroke-width: 3; }
+@keyframes needle-in { from { transform: rotate(-90deg); } }
+
+/* ---- River scene (house on the bank, water line set by status) ---- */
+.scene { display: block; width: 100%; max-width: 13rem; height: auto; }
+.sc-bank { fill: color-mix(in srgb, var(--water) 16%, var(--surface)); }
+.sc-wall { fill: var(--surface); }
+.sc-wall, .sc-roof, .sc-door, .sc-window, .sc-trunk, .sc-leaf, .sc-leaf-2 { stroke: var(--text); stroke-width: 1.6; stroke-linejoin: round; }
+.sc-roof { fill: var(--blue); }
+.sc-door { fill: var(--primary); }
+.sc-window { fill: var(--water-soft); }
+.sc-trunk { fill: var(--muted); }
+.sc-leaf { fill: var(--primary); }
+.sc-leaf-2 { fill: var(--water); }
+.sc-stop-a { stop-color: var(--water); }
+.sc-stop-b { stop-color: var(--blue); }
+.sc-wave { opacity: .88; }
+.sc-wave-back { fill: var(--blue); opacity: .35; }
+/* Water rises from the bottom to its level once, on load. */
+.sc-water { transform: translateY(var(--y)); animation: water-in 1.1s var(--ease) both; }
+@keyframes water-in { from { transform: translateY(120px); } }
+
+/* ---- Hero block at the top of "Live readings" ---- */
+.hero-reading { margin: 0 0 var(--sp-5); }
+.hero-label { margin: 0 0 var(--sp-1); color: var(--muted); font-size: var(--fs-sm); font-weight: 650; }
+.hero-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--sp-3) var(--sp-4); }
+.hero-figure { flex: 1 1 10rem; min-width: 0; }
+.hero-figure .value { margin-top: 0; }
+.hero-top .scene { flex: 1 1 9rem; }
+.hero-status {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3) var(--sp-4);
+  margin-top: var(--sp-4); padding-top: var(--sp-4);
+  border-top: 2px dashed var(--border);
+}
+.hero-status-text { flex: 1 1 8rem; min-width: 0; }
+.hero-note { margin: var(--sp-2) 0 0; color: var(--muted); font-size: var(--fs-sm); max-width: 32ch; }
+
+/* ---- Level tube: labels on both sides, positioned at the same percentages as the water ---- */
+.level { margin: var(--sp-5) 0 0; padding-top: var(--sp-4); border-top: 2px dashed var(--border); }
+.level-body {
+  display: grid; grid-template-columns: minmax(0, 1fr) 3.25rem minmax(0, 1fr); gap: var(--sp-3);
+  height: 13rem; margin: var(--sp-3) 0 var(--sp-2); padding: 1.1rem 0; /* padding keeps edge labels inside */
+}
+.level-col { position: relative; }
+.level-now, .level-mark { position: absolute; margin: 0; transform: translateY(50%); line-height: 1.2; }
+.level-now { right: 0; display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.level-now .num { font-size: var(--fs-lg); }
+.level-now::after { content: ""; position: absolute; right: -.75rem; top: 50%; width: .5rem; border-top: 2px solid var(--text); }
+.level-mark { left: 0; font-size: var(--fs-sm); color: var(--muted); }
+.level-mark strong { display: block; color: var(--text); }
+.level-mark::before { content: ""; position: absolute; left: -.75rem; top: 50%; width: .5rem; border-top: 2px dashed var(--border-strong); }
+.level-tube {
+  position: relative; overflow: hidden;
+  border: 2px solid var(--border-strong); border-radius: 1.1rem;
+  background:
+    linear-gradient(var(--border-strong) 0 0) 0 75% / 100% 2px no-repeat, /* typical high line */
+    linear-gradient(var(--border-strong) 0 0) 0 25% / 100% 2px no-repeat, /* typical low line */
+    repeating-linear-gradient(to top, transparent 0 calc(10% - 1px), color-mix(in srgb, var(--border) 70%, transparent) 0 10%),
+    var(--surface-2);
+}
+.level-water {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to top, var(--blue), var(--water));
+  border-top: 2px solid var(--text);
+  transform-origin: bottom; animation: level-in 1s var(--ease) both;
+}
+.is-high .level-water { background: var(--coral); }
+.is-low .level-water { background: var(--amber); }
+@keyframes level-in { from { transform: scaleY(0); } }

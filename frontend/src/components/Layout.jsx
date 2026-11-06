@@ -11,7 +11,7 @@ import { PinIcon, SearchIcon, WaveIcon } from './icons/index.jsx';
 export default function Layout() {
   const { pathname } = useLocation();
   const main = useRef(null);
-  useLiquidGlassAll(); // every button, nav pill, card and panel gets its own liquid glass
+  useLiquidGlassAll(); // header pills and disclaimer footer get liquid glass
   const prev = useRef(pathname);
   const [moved, setMoved] = useState(false); // true after the first route change: enables the page-enter animation
   // When the route changes, move focus to <main> so keyboard/screen-reader users land on new content.

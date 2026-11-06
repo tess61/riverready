@@ -1,11 +1,11 @@
 # Generates the original RiverReady app icons ("Deep Current" theme): a glowing glass water drop carrying
-# two waves, floating over blurred aqua/blue/violet currents on ink navy. Colours match src/styles/tokens.css.
+# two waves, floating over blurred aqua and blue currents on ink navy (two colours, blending). Colours match src/styles/tokens.css.
 # Run from frontend/: python3 -I scripts/make-icons.py
 from PIL import Image, ImageDraw, ImageFilter, ImageChops
 import math
 
 NAVY = (10, 16, 32)                 # --bg (dark)
-AQUA, BLUE, VIOLET = (34, 211, 197), (59, 108, 255), (124, 77, 255)
+AQUA, BLUE = (34, 211, 197), (59, 108, 255)
 SS = 4  # draw at 4x and scale down, for smooth (anti-aliased) edges
 
 
@@ -19,7 +19,7 @@ def backdrop(S):
     # Soft currents: three wide ribbons, heavily blurred, full-bleed so an OS mask never shows bare corners.
     layer = Image.new("RGB", (S, S), NAVY)
     d = ImageDraw.Draw(layer)
-    for colour, base, w in ((AQUA, 0.18, 0.2), (BLUE, 0.55, 0.24), (VIOLET, 0.92, 0.24)):
+    for colour, base, w in ((AQUA, 0.18, 0.2), (BLUE, 0.55, 0.24), (AQUA, 0.92, 0.24)):
         pts = [(S * t / 80, S * (base + 0.08 * math.sin(t / 80 * math.pi * 2 + base * 5))) for t in range(-4, 85)]
         d.line(pts, fill=colour, width=int(S * w), joint="curve")
     return Image.blend(Image.new("RGB", (S, S), NAVY), layer.filter(ImageFilter.GaussianBlur(S * 0.12)), 0.6)
@@ -43,8 +43,8 @@ def draw(size, safe):
     S = size * SS
     img = backdrop(S)
     mask, (cx, cy, r) = drop_mask(S, safe)
-    # Glass body: aqua (top-left) to violet (bottom-right), a little translucent over the currents.
-    body = Image.blend(img, diagonal(S, AQUA, VIOLET, 45), 0.88)
+    # Glass body: aqua (top-left) to blue (bottom-right), a little translucent over the currents.
+    body = Image.blend(img, diagonal(S, AQUA, BLUE, 45), 0.88)
     img = Image.composite(body, img, mask)
     # Inner glow at the bottom and a 1px-style bright rim, like the in-app glass.
     rim = ImageChops.subtract(mask, mask.filter(ImageFilter.MinFilter((int(S * 0.008) // 2) * 2 + 1)))
