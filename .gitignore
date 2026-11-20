@@ -17,3 +17,6 @@ backend/cache/
 .DS_Store
 .env.production
 .jury/
+
+# Local reference copy of the liquid-glass library (vendored into frontend/src/lib)
+liquid-glass/
