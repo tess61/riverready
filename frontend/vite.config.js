@@ -44,5 +44,7 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     server: { proxy: { '/api': 'http://localhost:8000' } },
+    // `npm run preview` (local test of the production build) needs the same proxy, or every /api call 404s.
+    preview: { proxy: { '/api': 'http://localhost:8000' } },
   };
 });
