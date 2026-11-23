@@ -94,7 +94,7 @@ $router = new Router();
 
 $router->add('GET', '/api/health', static function (): void {
     try {
-        db()->query('SELECT 1'); // constant query, no user input
+        db()->prepare('SELECT 1')->execute(); // prepared like every other query (brief requirement)
     } catch (Throwable $e) {
         error_log('[riverready] health check DB failure: ' . get_class($e) . ': ' . $e->getMessage());
         Response::error(503, 'DB_UNAVAILABLE', 'Database is unavailable.');

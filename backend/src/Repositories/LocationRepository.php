@@ -20,8 +20,10 @@ final class LocationRepository
 
     public function all(): array
     {
-        $rows = $this->pdo->query('SELECT * FROM locations ORDER BY name ASC, id ASC')->fetchAll(); // no user input
-        return array_map([$this, 'cast'], $rows);
+        // Prepared even without parameters: the brief requires prepared statements for every query.
+        $st = $this->pdo->prepare('SELECT * FROM locations ORDER BY name ASC, id ASC');
+        $st->execute();
+        return array_map([$this, 'cast'], $st->fetchAll());
     }
 
     public function find(int $id): ?array
